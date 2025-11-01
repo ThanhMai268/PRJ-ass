@@ -7381,14 +7381,14 @@ h1, h2, h3, h4, h5,
     top: 0;
     right: -5px;
     padding: 0;
-    background: #88c8bc;
+    background: black;
     border: 1px solid #88c8bc; }
     .colorlib-nav .top-menu .search-wrap .submit-search i {
       padding: 0; }
 
 .colorlib-nav .sale {
   padding: 14px 0;
-  background: #88c8bc; }
+  background: #FF4B2B; }
   .colorlib-nav .sale h3 {
     margin-bottom: 0;
     font-family: "Montserrat", Arial, sans-serif;
@@ -7521,7 +7521,7 @@ h1, h2, h3, h4, h5,
         -moz-box-shadow: 0px 14px 20px -9px rgba(0, 0, 0, 0.75);
         box-shadow: 0px 14px 20px -9px rgba(0, 0, 0, 0.75); }
     .colorlib-nav ul li.active > a {
-      color: #88c8bc !important;
+      color: black !important;
       position: relative; }
       .colorlib-nav ul li.active > a:after {
         opacity: 1;
@@ -8967,7 +8967,7 @@ input[type="text"] {
   transition: color .25s ease, opacity .25s ease;
 }
 .product-entry:hover .desc h2 a {
-  color: #0d6efd; /* màu nhấn; đổi nếu bạn dùng màu khác */
+  color: #FF4B2B; /* màu nhấn; đổi nếu bạn dùng màu khác */
 }
 
 /* Hỗ trợ bàn phím: khi focus vào link ảnh cũng có hiệu ứng */
@@ -8995,4 +8995,121 @@ input[type="text"] {
   .product-entry .desc {
     transition: none;
   }
+}
+/* ===== Hover sáng + chuyển động cho menu header ===== */
+
+/* Hiệu ứng chung cho link trong header */
+.colorlib-nav .menu-1 ul li a,
+#colorlib-logo a,
+.colorlib-nav .cart a,
+.colorlib-nav .user a,
+.colorlib-nav .has-dropdown > a {
+  position: relative;
+  display: inline-block;
+  transition: color .25s ease, transform .25s ease, text-shadow .25s ease;
+  will-change: transform, color;
+}
+
+/* Gạch chân trượt khi hover */
+.colorlib-nav .menu-1 ul li a::after,
+.colorlib-nav .cart a::after,
+.colorlib-nav .user a::after,
+#colorlib-logo a::after,
+.colorlib-nav .has-dropdown > a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s ease;
+  opacity: .7;
+}
+
+/* Màu + nâng nhẹ + sáng chữ */
+.colorlib-nav .menu-1 ul li a:hover,
+.colorlib-nav .menu-1 ul li a:focus,
+.colorlib-nav .cart a:hover,
+.colorlib-nav .user a:hover,
+#colorlib-logo a:hover,
+.colorlib-nav .has-dropdown:hover > a {
+  color: #FF4B2B;                 /* đổi màu khi hover (tuỳ bạn) */
+  transform: translateY(-2px);     /* nhích lên nhẹ */
+  text-shadow: 0 2px 8px rgba(255,75,43,.35); /* hơi phát sáng */
+}
+.colorlib-nav .menu-1 ul li a:hover::after,
+.colorlib-nav .cart a:hover::after,
+.colorlib-nav .user a:hover::after,
+#colorlib-logo a:hover::after,
+.colorlib-nav .has-dropdown:hover > a::after {
+  transform: scaleX(1);
+}
+
+/* Icon hơi nổi khi hover */
+.colorlib-nav .menu-1 ul li a i,
+.colorlib-nav .cart a i,
+.colorlib-nav .user a i {
+  transition: transform .25s ease, filter .25s ease;
+}
+.colorlib-nav .menu-1 ul li a:hover i,
+.colorlib-nav .cart a:hover i,
+.colorlib-nav .user a:hover i {
+  transform: translateY(-1px);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.25));
+}
+
+/* Dropdown mượt: mờ + trượt xuống */
+.colorlib-nav .menu-1 ul li .dropdown {
+  opacity: 0;
+  transform: translateY(10px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease, visibility .25s;
+}
+.colorlib-nav .menu-1 ul li.has-dropdown:hover .dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Nút search: sáng khi hover/focus */
+.search-wrap .form-control.search {
+  transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.search-wrap .form-control.search:focus {
+  box-shadow: 0 0 0 4px rgba(255,75,43,.15);
+  border-color: #FF4B2B;
+  transform: translateY(-1px);
+}
+.submit-search {
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+.submit-search:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.15);
+}
+
+/* Giảm chuyển động cho người dùng bật 'reduce motion' */
+@media (prefers-reduced-motion: reduce) {
+  .colorlib-nav .menu-1 ul li a,
+  .colorlib-nav .menu-1 ul li a::after,
+  .colorlib-nav .cart a,
+  .colorlib-nav .user a,
+  .colorlib-nav .has-dropdown > a,
+  .colorlib-nav .menu-1 ul li .dropdown,
+  .search-wrap .form-control.search,
+  .submit-search {
+    transition: none !important;
+  }
+}
+/* Fix cho HOME (class active) khi hover vẫn sáng */
+.colorlib-nav .menu-1 ul li.active > a:hover,
+.colorlib-nav .menu-1 ul li.active > a:focus {
+  color: #FF4B2B !important;       /* hoặc màu bạn muốn khi hover */
+  text-shadow: 0 2px 8px rgba(255,75,43,.35);
+  transform: translateY(-2px);
 }
