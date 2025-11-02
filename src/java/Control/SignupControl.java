@@ -31,17 +31,18 @@ public class SignupControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String name = (String)request.getParameter("name");
+        
         String email = (String)request.getParameter("email");
         String pass = (String)request.getParameter("pass");
         tbAccount account = new tbAccount();
         if(account.checkAccountExist(email)){
             request.setAttribute("errorSignup", "this email registered! please use another email");
+            request.setAttribute("stayOnSignup", true); 
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }else{
-            account.signupWithCustomer(name, email, pass);
-            System.out.println("signup completed");
-            response.sendRedirect("login.jsp");
+            account.signup(email, pass);
+             request.setAttribute("successSignup", "Sign up successfully!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     } 
 

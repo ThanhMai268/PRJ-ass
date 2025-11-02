@@ -8,15 +8,19 @@
             <file>file:/D:/projectprj/PRJ-ass/web/order-complete.html</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/Control/SignupControl.java</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/Control/HomeControl.java</file>
+            <file>file:/D:/projectprj/PRJ-ass/web/css/ionicons.min.css</file>
+            <file>file:/D:/projectprj/PRJ-ass/web/js/magnific-popup-options.js</file>
+            <file>file:/D:/projectprj/PRJ-ass/web/css/login.css</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/Model/Color.java</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/Model/Customer.java</file>
             <file>file:/D:/projectprj/PRJ-ass/web/men.html</file>
-            <file>file:/D:/projectprj/PRJ-ass/web/product-detail.html</file>
+            <file>file:/D:/projectprj/PRJ-ass/web/js/jquery.waypoints.min.js</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/Model/Product.java</file>
             <file>file:/D:/projectprj/PRJ-ass/web/header.jspf</file>
             <file>file:/D:/projectprj/PRJ-ass/web/home.jsp</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/DAO/tbProduct.java</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/DAO/tbProductDetail.java</file>
+            <file>file:/D:/projectprj/PRJ-ass/web/css/style.css</file>
             <file>file:/D:/projectprj/PRJ-ass/web/footer.jspf</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/Model/Size.java</file>
             <file>file:/D:/projectprj/PRJ-ass/web/navbar.jsp</file>
@@ -27,6 +31,7 @@
             <file>file:/D:/projectprj/PRJ-ass/web/js/login.js</file>
             <file>file:/D:/projectprj/PRJ-ass/web/prepros-6.config</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/Model/Account.java</file>
+            <file>file:/D:/projectprj/PRJ-ass/src/java/Control/BrandControl.java</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/DAO/tbAccount.java</file>
             <file>file:/D:/projectprj/PRJ-ass/src/java/Control/LogoutControl.java</file>
         </group>

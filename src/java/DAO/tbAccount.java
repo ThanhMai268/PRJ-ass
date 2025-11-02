@@ -39,38 +39,17 @@ public class tbAccount extends DBConnect {
         return null;
     }
 
-    public void signupWithCustomer(String name, String email, String pass) {
-        String insertAccount = "INSERT INTO Account (Email, Pass, isSell, isAdmin) VALUES (?, ?, 0, 0)";
-
-        try (Connection conn = new DBConnect().getConnection()) {
-            conn.setAutoCommit(false);
-
-            // Lấy ID tự sinh trực tiếp
-            try (PreparedStatement ps = conn.prepareStatement(insertAccount, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setString(1, email);
-                ps.setString(2, pass);
-                ps.executeUpdate();
-
-                int accID = 0;
-                try (ResultSet keys = ps.getGeneratedKeys()) {
-                    if (keys.next()) {
-                        accID = keys.getInt(1);
-                    }
-                }
-
-                try (PreparedStatement ps2 = conn.prepareStatement(
-                        "INSERT INTO Customer (CustomerName, AccountID) VALUES (?, ?)")) {
-                    ps2.setString(1, name);
-                    ps2.setInt(2, accID);
-                    ps2.executeUpdate();
-                }
-            }
-
-            conn.commit();
+   public void signup(String email, String pass) {
+        String query = "INSERT INTO Account (Email, Password, Role, Status) VALUES (?, ?, 2, 1)";
+        try {
+            conn = new DBConnect().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, pass);
+            ps.executeUpdate();
         } catch (Exception e) {
-            // rollback + log
+            setErrorCode(-1);//lỗi lệnh SQL
         }
-
     }
 
     public boolean checkAccountExist(String email) {

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,26 +8,36 @@
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+        <link rel="stylesheet" href="<c:url value='/css/login.css'/>">
 
     </head>
     <body>
 
         <!--<h2>Weekly Coding Challenge #1: Sign in/up Form</h2>-->
-
+        <c:if test="${not empty successSignup}">
+            <div id="toast" class="toast">${successSignup}</div>
+        </c:if>
+        <c:if test="${not empty errorSignup}">
+            <div id="toast" class="toast error">${errorSignup}</div>
+        </c:if>
+        <c:if test="${not empty errorLogin}">
+            <div id="toast" class="toast error">${errorLogin}</div>
+        </c:if>
         <div class="container" id="container">
             <!-- FORM ĐĂNG KÝ -->
             <div class="form-container sign-up-container">
                 <form action="Signup" method="post">
                     <h1>Create Account</h1>
-                    <c:if test="${not empty errorSignup}">
-                        <p style="color:red; text-align:center; font-weight:bold;">
-                            ${error}
-                        </p>
-                    </c:if>
+
                     <span>or use your email for registration</span>
-                    
-                    <input type="email" name="email" placeholder="Email" />
+
+                    <input type="text"
+                           id="email"
+                           name="email"
+                           placeholder="Email"
+                           required
+                           pattern="^(admin|[^\s@]+@[^\s@]+\.[^\s@]+)$"
+                           title="Nhập email hợp lệ (ví dụ: name@example.com)" />
                     <input type="password" name="pass" placeholder="Password" />
                     <button type="submit">Sign Up</button>
                 </form>
@@ -38,11 +49,7 @@
                     <h1>Sign in</h1>
                     <span>or use your account</span>
                     <!-- HIỂN THỊ THÔNG BÁO LỖI -->
-                    <c:if test="${not empty errorLogin}">
-                        <p style="color:red; text-align:center; font-weight:bold;">
-                            ${error}
-                        </p>
-                    </c:if>
+
                     <!-- CHÚ Ý: type="text" + pattern cho phép 'admin' hoặc email -->
                     <input type="text"
                            id="email"
@@ -74,8 +81,18 @@
             </div>
         </div>
 
-        <script src="${pageContext.request.contextPath}/js/login.js"></script>
 
 
+        <script>
+            // Nếu servlet gửi flag stayOnSignup = true
+            <% Boolean stayOnSignup = (Boolean) request.getAttribute("stayOnSignup"); %>
+            <% if (stayOnSignup != null && stayOnSignup) { %>
+            document.addEventListener('DOMContentLoaded', function () {
+                const container = document.getElementById('container');
+                container.classList.add('right-panel-active'); // 👈 bật lại tab Sign Up
+            });
+            <% } %>
+        </script>
+        <script src="<c:url value='/js/login.js'/>"></script>
     </body>
 </html>
