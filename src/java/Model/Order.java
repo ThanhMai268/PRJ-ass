@@ -16,7 +16,7 @@ public class Order {
     private Timestamp OrderDate; // hoặc LocalDateTime 
     private int Status;
 
-    public Order(int orderID, int CustomerID, Timestamp OrderDate, int Status) {
+    public Order(int orderID, Timestamp OrderDate,int CustomerID , int Status) {
         this.orderID = orderID;
         this.CustomerID = CustomerID;
         this.OrderDate = OrderDate;
