@@ -5,7 +5,7 @@
 
 package Control;
 
-import DAO.tbAccount;
+import DAO.AccountDAO;
 import Model.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpSession;
  * @author dungdzpro
  */
 @WebServlet(name="LoginControl", urlPatterns={"/Login"})
-public class LoginControl extends HttpServlet {
+public class LoginServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,7 +35,7 @@ public class LoginControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String email = (String)request.getParameter("email");
         String pass = (String)request.getParameter("pass");
-        tbAccount account = new tbAccount();
+        AccountDAO account = new AccountDAO();
         Account acc = account.login(email, pass);
         HttpSession session = request.getSession();
         if(acc==null){

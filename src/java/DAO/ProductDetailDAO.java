@@ -15,11 +15,11 @@ import java.util.List;
  *
  * @author dungdzpro
  */
-public class tbProductDetail extends DBConnect {
+public class ProductDetailDAO extends DBConnect {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public tbProductDetail() {
+    public ProductDetailDAO() {
         super();
     }
     public List<ProductDetail> getProductDetailByPid(int pid){

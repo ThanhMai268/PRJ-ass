@@ -15,7 +15,7 @@ import java.sql.Statement;
  *
  * @author dungdzpro
  */
-public class tbAccount extends DBConnect {
+public class AccountDAO extends DBConnect {
 
     PreparedStatement ps = null;
     ResultSet rs = null;

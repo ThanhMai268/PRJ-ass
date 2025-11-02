@@ -15,12 +15,12 @@ import java.util.List;
  *
  * @author dungdzpro
  */
-public class tbProduct extends DBConnect {
+public class ProductDAO extends DBConnect {
 
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public tbProduct() {
+    public ProductDAO() {
         super();//gọi hàm tạo của lớp cha DBConnect để kết nối CSDL
     }
 

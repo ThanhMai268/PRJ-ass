@@ -5,7 +5,8 @@
 
 package Control;
 
-import DAO.tbAccount;
+import DAO.ProductDAO;
+import Model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,13 +14,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
  * @author dungdzpro
  */
-@WebServlet(name="SignupControl", urlPatterns={"/Signup"})
-public class SignupControl extends HttpServlet {
+@WebServlet(name="BrandServlet", urlPatterns={"/Brand"})
+public class BrandServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,19 +33,14 @@ public class SignupControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        String email = (String)request.getParameter("email");
-        String pass = (String)request.getParameter("pass");
-        tbAccount account = new tbAccount();
-        if(account.checkAccountExist(email)){
-            request.setAttribute("errorSignup", "this email registered! please use another email");
-            request.setAttribute("stayOnSignup", true); 
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }else{
-            account.signup(email, pass);
-             request.setAttribute("successSignup", "Sign up successfully!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
+        String bid = (String)request.getParameter("bid");
+        ProductDAO tbpro = new ProductDAO();
+        List<Product> listPro = tbpro.getProductByBrand(bid);
+        List<String> listCategory = tbpro.getALlCategory();
+        request.setAttribute("listPro", listPro);
+        request.setAttribute("bid", bid);
+        request.setAttribute("listCategory", listCategory);
+        request.getRequestDispatcher("brand.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
