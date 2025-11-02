@@ -20,6 +20,11 @@ public class AccountDAO extends DBConnect {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
+    public AccountDAO() {
+        super();
+    }
+    
+    
     public Account login(String email, String pass) {
 
         String query = "select * from Account where Email = ? and Password = ? ";

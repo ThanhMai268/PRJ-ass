@@ -5,190 +5,171 @@
 <html>
   <%@ include file="header.jspf" %>
 
-  <!-- ====== Chu?n b? d? li?u t? listprode: colors, sizes, stock, qty ====== -->
-  <!-- 1) Colors (cid) duy nh?t b?ng k? thu?t marker ",<cid>," -->
-  <c:set var="colorsCSV" value=","/>
-  <c:set var="firstCid"  value=""/>
-  <c:forEach var="pd" items="${listprode}">
-    <c:set var="marker" value=",${pd.cid},"/>
-    <c:if test="${fn:indexOf(colorsCSV, marker) == -1}">
-      <c:set var="colorsCSV" value="${colorsCSV}${pd.cid},"/>
-      <c:if test="${empty firstCid}">
-        <c:set var="firstCid" value="${pd.cid}"/>
-      </c:if>
-    </c:if>
-  </c:forEach>
+  <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
-  <!-- Color hi?n t?i: ?u tiên param.color; r?ng l?y firstCid. Ép v? s? ?? so sánh ?n ??nh -->
-  <c:set var="selCid"    value="${empty param.color ? firstCid : param.color}"/>
-  <c:set var="selCidNum" value="${selCid + 0}"/>
-
-  <!-- 2) Sizes (sid) duy nh?t theo selCid, c?ng dùng marker -->
-  <c:set var="sizesCSV" value=","/>
-  <c:set var="firstSid" value=""/>
-  <c:forEach var="pd" items="${listprode}">
-    <c:if test="${pd.cid == selCidNum}">
-      <c:set var="sMarker" value=",${pd.sid},"/>
-      <c:if test="${fn:indexOf(sizesCSV, sMarker) == -1}">
-        <c:set var="sizesCSV" value="${sizesCSV}${pd.sid},"/>
-        <c:if test="${empty firstSid}">
-          <c:set var="firstSid" value="${pd.sid}"/>
-        </c:if>
-      </c:if>
-    </c:if>
-  </c:forEach>
-
-  <!-- Size hi?n t?i: ?u tiên param.size; r?ng l?y firstSid. Ép v? s? ?? so sánh ?n ??nh -->
-  <c:set var="selSid"    value="${empty param.size ? firstSid : param.size}"/>
-  <c:set var="selSidNum" value="${selSid + 0}"/>
-
-  <!-- 3) Tính stock t?ng cho (selCid, selSid). ? ?ây dùng pd.qid là S? L??NG. N?u qid là FK, thay b?ng tr??ng s? l??ng th?c. -->
-  <c:set var="stock" value="0"/>
-  <c:forEach var="pd" items="${listprode}">
-    <c:if test="${pd.cid == selCidNum && pd.sid == selSidNum}">
-      <c:set var="stock" value="${stock + pd.qid}"/>
-    </c:if>
-  </c:forEach>
-
-  <!-- 4) K?p qty vào [1..stock] -->
-  <c:set var="qtyReq" value="${empty param.qty ? 1 : param.qty}"/>
-  <c:choose>
-    <c:when test="${stock <= 0}">
-      <c:set var="qty" value="1"/>
-    </c:when>
-    <c:when test="${qtyReq > stock}">
-      <c:set var="qty" value="${stock}"/>
-    </c:when>
-    <c:when test="${qtyReq < 1}">
-      <c:set var="qty" value="1"/>
-    </c:when>
-    <c:otherwise>
-      <c:set var="qty" value="${qtyReq}"/>
-    </c:otherwise>
-  </c:choose>
-
-  <!-- ====== UI: GI? NGUYÊN CLASS CSS C? ====== -->
-  <div class="size-wrap">
-    <!-- COLOR -->
-    <div class="block-26 mb-2">
-      <h4>Color</h4>
-      <ul>
-        <c:if test="${fn:length(colorsCSV) > 1}">
-          <c:forTokens var="c" items="${fn:substring(colorsCSV, 1, fn:length(colorsCSV)-1)}" delims=",">
-            <c:set var="cNum" value="${c + 0}"/>
-            <c:set var="active" value="${cNum == selCidNum}"/>
-            <li>
-              <a class="${active ? 'active' : ''}"
-                 href="<c:url value='/ProductDetail'>
-                          <c:param name='pid' value='${pro.id}'/>
-                          <c:param name='color' value='${c}'/>
-                          <c:param name='size'  value='${selSid}'/>
-                          <c:param name='qty'   value='${qty}'/>
-                        </c:url>">
-                ${c}
-                <!-- N?u có colorMap: ${colorMap[cNum]} -->
-              </a>
-            </li>
-          </c:forTokens>
-        </c:if>
-      </ul>
+<div class="breadcrumbs">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <p class="bread">
+          <span><a href="${ctx}/Home">Home</a></span> / 
+          <span>Product Details</span>
+        </p>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- SIZE -->
-    <div class="block-26 mb-4">
-      <h4>Size</h4>
-      <ul>
-        <c:if test="${fn:length(sizesCSV) > 1}">
-          <c:forTokens var="s" items="${fn:substring(sizesCSV, 1, fn:length(sizesCSV)-1)}" delims=",">
-            <c:set var="sNum" value="${s + 0}"/>
-            <!-- Tính t?n c?a t?ng size ?? disable n?u h?t -->
-            <c:set var="sStock" value="0"/>
-            <c:forEach var="pd" items="${listprode}">
-              <c:if test="${pd.cid == selCidNum && pd.sid == sNum}">
-                <c:set var="sStock" value="${sStock + pd.qid}"/>
+<div class="colorlib-product">
+  <div class="container">
+    <div class="row row-pb-lg product-detail-wrap">
+      <!-- LEFT: images -->
+      <div class="col-sm-8">
+        <div class="owl-carousel">
+          <!-- ?nh chính t? pro -->
+          <c:if test="${not empty pro.image}">
+            <div class="item">
+              <div class="product-entry border">
+                <a href="#" class="prod-img">
+                  <img src="${pro.image}" class="img-fluid" alt="${pro.name}">
+                </a>
+              </div>
+            </div>
+          </c:if>
+
+          <!-- N?u chi ti?t có ?nh (tùy DB), duy?t thêm; tránh trùng -->
+          <c:set var="imgCSV" value=","/>
+          <c:forEach var="pd" items="${listprode}">
+            <c:if test="${not empty pd.image}">
+              <c:set var="marker" value=",${pd.image},"/>
+              <c:if test="${fn:indexOf(imgCSV, marker) == -1}">
+                <c:set var="imgCSV" value="${imgCSV}${pd.image},"/>
+                <div class="item">
+                  <div class="product-entry border">
+                    <a href="#" class="prod-img">
+                      <img src="${pd.image}" class="img-fluid" alt="${pro.name}">
+                    </a>
+                  </div>
+                </div>
               </c:if>
-            </c:forEach>
+            </c:if>
+          </c:forEach>
+        </div>
+      </div>
 
-            <c:set var="isActive"   value="${sNum == selSidNum}"/>
-            <c:set var="isDisabled" value="${sStock == 0}"/>
+      <!-- RIGHT: info -->
+      <div class="col-sm-4">
+        <div class="product-desc">
+          <h3><c:out value="${pro.name}" /></h3>
 
-            <li>
+          <p class="price">
+            <span>
               <c:choose>
-                <c:when test="${isDisabled}">
-                  <a class="disabled" title="H?t hàng">${s}</a>
-                </c:when>
-                <c:otherwise>
-                  <a class="${isActive ? 'active' : ''}"
-                     href="<c:url value='/ProductDetail'>
-                              <c:param name='pid' value='${pro.id}'/>
-                              <c:param name='color' value='${selCid}'/>
-                              <c:param name='size'  value='${s}'/>
-                              <c:param name='qty'   value='${qty}'/>
-                            </c:url>">
-                    ${s}
-                    <!-- N?u có sizeMap: ${sizeMap[sNum]} -->
-                  </a>
-                </c:otherwise>
+                <c:when test="${not empty pro.price}">$<c:out value="${pro.price}" /></c:when>
+                <c:otherwise>Contact</c:otherwise>
               </c:choose>
-            </li>
-          </c:forTokens>
-        </c:if>
-      </ul>
+            </span>
+            <span class="rate">
+              <i class="icon-star-full"></i>
+              <i class="icon-star-full"></i>
+              <i class="icon-star-full"></i>
+              <i class="icon-star-full"></i>
+              <i class="icon-star-half"></i>
+              (74 Rating)
+            </span>
+          </p>
 
-      <small class="text-muted d-block mt-2">
-        <c:choose>
-          <c:when test="${stock > 0}">Còn ${stock} s?n ph?m</c:when>
-          <c:otherwise>H?t hàng</c:otherwise>
-        </c:choose>
-      </small>
-    </div>
-  </div>
+          <p><c:out value="${pro.description}" /></p>
 
-  <!-- Quantity: gi? class/id c? ?? JS c?ng/tr? s?n có v?n ch?y -->
-  <div class="input-group mb-4">
-    <span class="input-group-btn">
-      <a class="quantity-left-minus btn" href="<c:url value='/ProductDetail'>
-             <c:param name='pid' value='${pro.id}'/>
-             <c:param name='color' value='${selCid}'/>
-             <c:param name='size'  value='${selSid}'/>
-             <c:param name='qty'   value='${qty-1}'/>
-           </c:url>">
-        <i class="icon-minus2"></i>
-      </a>
-    </span>
+          <!-- SIZE & COLOR from listprode (unique) -->
+          <div class="size-wrap">
+            <!-- Sizes -->
+            <div class="block-26 mb-2">
+              <h4>Size</h4>
+              <ul>
+                <c:set var="sizesCSV" value=","/>
+                <c:forEach var="pd" items="${listprode}">
+                  <c:if test="${not empty pd.size}">
+                    <c:set var="marker" value=",${pd.size},"/>
+                    <c:if test="${fn:indexOf(sizesCSV, marker) == -1}">
+                      <c:set var="sizesCSV" value="${sizesCSV}${pd.size},"/>
+                      <li>
+                        <a href="#" data-size="${pd.size}"><c:out value="${pd.size}" /></a>
+                      </li>
+                    </c:if>
+                  </c:if>
+                </c:forEach>
+              </ul>
+            </div>
 
-    <input type="text" id="quantity" name="quantity"
-           class="form-control input-number"
-           value="${qty}" min="1" max="${stock > 0 ? stock : 1}">
+            <!-- Colors -->
+            <div class="block-26 mb-4">
+              <h4>Color</h4>
+              <ul>
+                <c:set var="colorsCSV" value=","/>
+                <c:forEach var="pd" items="${listprode}">
+                  <!-- ?u tiên tên màu n?u có; n?u không dùng cid -->
+                  <c:set var="colorLabel">
+                    <c:choose>
+                      <c:when test="${not empty pd.color}">${pd.color}</c:when>
+                      <c:otherwise>Color #<c:out value="${pd.cid}" /></c:otherwise>
+                    </c:choose>
+                  </c:set>
 
-    <span class="input-group-btn ml-1">
-      <a class="quantity-right-plus btn" href="<c:url value='/ProductDetail'>
-             <c:param name='pid' value='${pro.id}'/>
-             <c:param name='color' value='${selCid}'/>
-             <c:param name='size'  value='${selSid}'/>
-             <c:param name='qty'   value='${qty+1}'/>
-           </c:url>">
-        <i class="icon-plus2"></i>
-      </a>
-    </span>
-  </div>
+                  <c:set var="dedupKey">
+                    <c:choose>
+                      <c:when test="${not empty pd.color}">${pd.color}</c:when>
+                      <c:otherwise>${pd.cid}</c:otherwise>
+                    </c:choose>
+                  </c:set>
 
-  <!-- Add to Cart: gi? nguyên class c? -->
-  <div class="row">
-    <div class="col-sm-12 text-center">
-      <p class="addtocart">
-        <a href="<c:url value='/add-to-cart'>
-                   <c:param name='id'   value='${pro.id}'/>
-                   <c:param name='color' value='${selCid}'/>
-                   <c:param name='size'  value='${selSid}'/>
-                   <c:param name='qty'   value='${qty}'/>
-                 </c:url>"
-           class="btn btn-primary btn-addtocart ${stock <= 0 ? 'disabled' : ''}">
-          <i class="icon-shopping-cart"></i> Add to Cart
-        </a>
-      </p>
-    </div>
-  </div>
+                  <c:if test="${not empty dedupKey}">
+                    <c:set var="marker" value=",${dedupKey},"/>
+                    <c:if test="${fn:indexOf(colorsCSV, marker) == -1}">
+                      <c:set var="colorsCSV" value="${colorsCSV}${dedupKey},"/>
+                      <li>
+                        <a href="#" data-color="${dedupKey}">
+                          <c:out value="${colorLabel}" />
+                        </a>
+                      </li>
+                    </c:if>
+                  </c:if>
+                </c:forEach>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div class="input-group mb-4">
+            <span class="input-group-btn">
+              <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
+                <i class="icon-minus2"></i>
+              </button>
+            </span>
+            <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
+            <span class="input-group-btn ml-1">
+              <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+                <i class="icon-plus2"></i>
+              </button>
+            </span>
+          </div>
+
+          <!-- Add to cart (gi? nguyên; có th? ??i sang form n?u c?n truy?n size/color) -->
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <p class="addtocart">
+                <a href="${ctx}/cart" class="btn btn-primary btn-addtocart">
+                  <i class="icon-shopping-cart"></i> Add to Cart
+                </a>
+              </p>
+            </div>
+          </div>
+
+        </div><!-- /.product-desc -->
+      </div><!-- /.col-sm-4 -->
+    </div><!-- /.row -->
+  </div><!-- /.container -->
+</div><!-- /.colorlib-product -->
 
   <%@ include file="footer.jspf" %>
 </html>
