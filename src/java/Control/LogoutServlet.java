@@ -5,8 +5,6 @@
 
 package Control;
 
-import DAO.tbProduct;
-import Model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,15 +12,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author dungdzpro
  */
-@WebServlet(name="HomeControl", urlPatterns={"/Home"})
-public class HomeControl extends HttpServlet {
+@WebServlet(name="LogoutControl", urlPatterns={"/Logout"})
+public class LogoutServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,15 +31,11 @@ public class HomeControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        tbProduct tbpro = new tbProduct();
-        List<Product> listPro = tbpro.getAllProduct();
-        List<String> listCategory = tbpro.getALlCategory();
-        
-        request.setAttribute("listPro", listPro);
-        request.setAttribute("listCategory", listCategory);
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        session.removeAttribute("acc");
+        response.sendRedirect("Home");
     } 
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
@@ -78,5 +71,5 @@ public class HomeControl extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
 }

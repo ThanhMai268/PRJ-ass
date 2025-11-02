@@ -5,10 +5,7 @@
 
 package Control;
 
-import DAO.tbProduct;
-import DAO.tbProductDetail;
-import Model.Product;
-import Model.ProductDetail;
+import DAO.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,14 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
  * @author dungdzpro
  */
-@WebServlet(name="ProductDetailControl", urlPatterns={"/ProductDetail"})
-public class ProductDetailControl extends HttpServlet {
+@WebServlet(name="SignupControl", urlPatterns={"/Signup"})
+public class SignupServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,17 +31,19 @@ public class ProductDetailControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        int pid = Integer.parseInt(request.getParameter("pid"));
         
-        tbProduct tbpro = new tbProduct();
-        Product pro = tbpro.getProductById(pid);
-        tbProductDetail tbprode = new tbProductDetail();
-        List<ProductDetail> listprode = tbprode.getProductDetailByPid(pid);
-        List<Product> listPro = tbpro.getAllProduct();
-         request.setAttribute("listPro", listPro);
-        request.setAttribute("listprode", listprode);
-        request.setAttribute("pro", pro);
-        request.getRequestDispatcher("productdetail.jsp").forward(request, response);
+        String email = (String)request.getParameter("email");
+        String pass = (String)request.getParameter("pass");
+        AccountDAO account = new AccountDAO();
+        if(account.checkAccountExist(email)){
+            request.setAttribute("errorSignup", "this email registered! please use another email");
+            request.setAttribute("stayOnSignup", true); 
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }else{
+            account.signup(email, pass);
+             request.setAttribute("successSignup", "Sign up successfully!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

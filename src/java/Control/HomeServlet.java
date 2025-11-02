@@ -5,6 +5,8 @@
 
 package Control;
 
+import DAO.ProductDAO;
+import Model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +14,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author dungdzpro
  */
-@WebServlet(name="LogoutControl", urlPatterns={"/Logout"})
-public class LogoutControl extends HttpServlet {
+@WebServlet(name="HomeControl", urlPatterns={"/Home"})
+public class HomeServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,11 +34,15 @@ public class LogoutControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        session.removeAttribute("acc");
-        response.sendRedirect("Home");
+        ProductDAO tbpro = new ProductDAO();
+        List<Product> listPro = tbpro.getAllProduct();
+        List<String> listCategory = tbpro.getALlCategory();
+        
+        request.setAttribute("listPro", listPro);
+        request.setAttribute("listCategory", listCategory);
+        request.getRequestDispatcher("home.jsp").forward(request, response);
     } 
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
@@ -71,5 +78,5 @@ public class LogoutControl extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
 }
