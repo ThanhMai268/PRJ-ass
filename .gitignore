@@ -1,1 +1,42 @@
-nbproject/private/private.xml
+# =====================================
+# Build outputs
+target/
+build/
+dist/
+out/
+
+# IDE
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+*.iws
+.vscode/
+nbproject/private/
+nbbuild/
+nbdist/
+
+# Logs and temp
+*.log
+tmp/
+logs/
+.DS_Store
+Thumbs.db
+.cache/
+
+# Environment configs
+.env
+.env.local
+application.properties
+jdbc.properties
+
+# Deployment files
+*.war
+*.ear
+/webapp/WEB-INF/classes/
+/webapp/WEB-INF/lib/
+
+# Misc
+*.bak
+*.swp
