@@ -77,14 +77,14 @@
                                 <c:choose>
                                     <c:when test="${not empty sessionScope.acc}">
                                         <li class="user">
-                                            <a href="/logout">
+                                            <a href="<c:url value='/Logout'/>">
                                                 <i class="fa fa-sign-out-alt"></i> Logout
                                             </a>
                                         </li>
                                     </c:when>
                                     <c:otherwise>
                                         <li class="user">
-                                            <a href="/login.jsp">
+                                            <a href="login.jsp">
                                                 <i class="fa fa-user"></i> Login
                                             </a>
                                         </li>

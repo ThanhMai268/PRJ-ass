@@ -5,6 +5,8 @@
 
 package Control;
 
+import DAO.tbAccount;
+import Model.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,12 +14,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author dungdzpro
  */
-@WebServlet(name="LoginControl", urlPatterns={"/LoginControl"})
+@WebServlet(name="LoginControl", urlPatterns={"/Login"})
 public class LoginControl extends HttpServlet {
    
     /** 
@@ -30,17 +33,17 @@ public class LoginControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet LoginControl</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet LoginControl at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String email = (String)request.getParameter("email");
+        String pass = (String)request.getParameter("pass");
+        tbAccount account = new tbAccount();
+        Account acc = account.login(email, pass);
+        HttpSession session = request.getSession();
+        if(acc==null){
+            request.setAttribute("error", "wrong email or password!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }else{
+            session.setAttribute("acc", acc);
+            response.sendRedirect("Home");
         }
     } 
 
