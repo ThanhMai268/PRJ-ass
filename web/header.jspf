@@ -1,5 +1,6 @@
 
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <head>
     <meta charset="UTF-8" />
     <title>Footwear - Colorlib</title>
@@ -34,7 +35,7 @@
                     <!-- logo + search -->
                     <div class="row">
                         <div class="col-sm-7 col-md-9">
-                            <div id="colorlib-logo"><a href="<c:url value='/Home'/>">Footwear</a></div>
+                            <div id="colorlib-logo"><a href="<c:url value='/Home'/>">ShoeShop</a></div>
                         </div>
                         <div class="col-sm-5 col-md-3">
                             <form action="<c:url value='/search'/>" class="search-wrap">
