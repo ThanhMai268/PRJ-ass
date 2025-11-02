@@ -5,6 +5,7 @@
 
 package Control;
 
+import DAO.tbAccount;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,8 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author dungdzpro
  */
-@WebServlet(name="Signup", urlPatterns={"/Signup"})
-public class Signup extends HttpServlet {
+@WebServlet(name="SignupControl", urlPatterns={"/Signup"})
+public class SignupControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,7 +31,18 @@ public class Signup extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        String name = (String)request.getParameter("name");
+        String email = (String)request.getParameter("email");
+        String pass = (String)request.getParameter("pass");
+        tbAccount account = new tbAccount();
+        if(account.checkAccountExist(email)){
+            request.setAttribute("errorSignup", "this email registered! please use another email");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }else{
+            account.signupWithCustomer(name, email, pass);
+            System.out.println("signup completed");
+            response.sendRedirect("login.jsp");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -14,16 +14,24 @@ public class ProductDetail {
     private int cid;
     private int sid;
    
-    private int qid;
-
-    public ProductDetail(int pdid, int pid, int cid, int sid, int qid) {
+    private int quantity;
+    private int status;
+    public ProductDetail(int pdid, int pid, int cid, int sid, int quantity) {
         this.pdid = pdid;
         this.pid = pid;
         this.cid = cid;
         this.sid = sid;
-        this.qid = qid;
+        this.quantity = quantity;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+ 
     public int getPdid() {
         return pdid;
     }
@@ -56,17 +64,17 @@ public class ProductDetail {
         this.sid = sid;
     }
 
-    public int getQid() {
-        return qid;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setQid(int qid) {
-        this.qid = qid;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     @Override
     public String toString() {
-        return "ProductDetail{" + "pdid=" + pdid + ", pid=" + pid + ", cid=" + cid + ", sid=" + sid + ", qid=" + qid + '}';
+        return "ProductDetail{" + "pdid=" + pdid + ", pid=" + pid + ", cid=" + cid + ", sid=" + sid + ", qid=" + quantity + '}';
     }
     
 }

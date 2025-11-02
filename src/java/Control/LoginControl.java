@@ -39,7 +39,7 @@ public class LoginControl extends HttpServlet {
         Account acc = account.login(email, pass);
         HttpSession session = request.getSession();
         if(acc==null){
-            request.setAttribute("error", "wrong email or password!");
+            request.setAttribute("errorLogin", "wrong email or password!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }else{
             session.setAttribute("acc", acc);

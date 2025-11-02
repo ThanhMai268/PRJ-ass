@@ -13,7 +13,7 @@ public class Account {
     private String email;
     private String pass;
     private int role;
-
+    private int status;
     public Account() {
     }
 
@@ -24,6 +24,14 @@ public class Account {
         this.role = role;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    
     public int getAid() {
         return aid;
     }
