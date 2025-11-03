@@ -5,10 +5,14 @@
 
 package Control;
 
+import DAO.ColorDAO;
 import DAO.ProductDAO;
 import DAO.ProductDetailDAO;
+import DAO.SizeDAO;
+import Model.Color;
 import Model.Product;
 import Model.ProductDetail;
+import Model.Size;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -37,17 +41,25 @@ public class ProductDetailServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         int pid = Integer.parseInt(request.getParameter("pid"));
         
-        ProductDAO tbpro = new ProductDAO();
-        Product pro = tbpro.getProductById(pid);
+        ProductDAO tbpro = new ProductDAO();        
         ProductDetailDAO tbprode = new ProductDetailDAO();
+        ColorDAO tbColor = new ColorDAO();
+        SizeDAO tbSize = new SizeDAO();
+        
+        Product pro = tbpro.getProductById(pid);
         List<ProductDetail> listprode = tbprode.getProductDetailByPid(pid);
         List<Product> listPro = tbpro.getAllProduct();
+        List<Size> listSize = tbSize.getSizeOfProduct(listprode);
+        List<Color> listColor = tbColor.getColorOfProduct(listprode);
+        
+        request.setAttribute("listColor", listColor);
+        request.setAttribute("listSize", listSize);
          request.setAttribute("listPro", listPro);
         request.setAttribute("listprode", listprode);
         request.setAttribute("pro", pro);
         request.getRequestDispatcher("productdetail.jsp").forward(request, response);
     } 
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.

@@ -35,7 +35,8 @@ public class ProductDetailDAO extends DBConnect {
                         rs.getInt(2),
                         rs.getInt(3),
                         rs.getInt(4),
-                        rs.getInt(5)
+                        rs.getInt(5),
+                        rs.getInt(6)
                 ));
             }
         } catch (Exception e) {
