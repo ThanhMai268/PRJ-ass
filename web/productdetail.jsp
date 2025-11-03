@@ -45,9 +45,9 @@
                         <h3><c:out value="${pro.name}" /></h3>
 
                         <p class="price">
-                            
+                            <span >
                                         <fmt:formatNumber value="${pro.price}" pattern="#,##0"/><span class="vnd">&#8363;</span>
-                                    
+                                    </span>
                             
                         </p>
 
