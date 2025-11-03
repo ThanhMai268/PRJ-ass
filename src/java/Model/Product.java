@@ -23,7 +23,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int id, String name, String image, double price, int status, String brand, String category) {
+    public Product(int id, String name, String image, double price, String category,String brand,int status) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -97,6 +97,11 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", name=" + name + ", image=" + image + ", price=" + price + ", status=" + status + ", brand=" + brand + ", category=" + category + '}';
     }
 
     
