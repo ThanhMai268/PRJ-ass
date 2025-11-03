@@ -24,12 +24,12 @@
         <div class="container">
             <div class="row row-pb-lg product-detail-wrap">
 
-                <!-- LEFT: single image from pro -->
+                <!-- LEFT: image -->
                 <div class="col-sm-8">
                     <div class="product-entry border p-3 text-center">
                         <c:choose>
                             <c:when test="${not empty pro.image}">
-                                <img src="<c:out value='${fn:startsWith(pro.image,"http") ? pro.image : (ctx.concat("/images/").concat(pro.image))}'/>"
+                                <img src="<c:out value='${fn:startsWith(pro.image, "http") ? pro.image : (ctx.concat("/images/").concat(pro.image))}'/>"
                                      class="img-fluid" alt="${pro.name}">
                             </c:when>
                             <c:otherwise>
@@ -45,117 +45,171 @@
                         <h3><c:out value="${pro.name}" /></h3>
 
                         <p class="price">
-                            <span >
-                                        <fmt:formatNumber value="${pro.price}" pattern="#,##0"/><span class="vnd">&#8363;</span>
-                                    </span>
-                            
+                            <span>
+                                <fmt:formatNumber value="${pro.price}" pattern="#,##0"/>
+                                <span class="vnd">&#8363;</span>
+                            </span>
                         </p>
 
-                       
-
-                        <!-- Sizes -->
                         <div class="block-26 mb-2">
                             <h4>Size</h4>
                             <ul>
                                 <c:forEach var="s" items="${listSize}">
-                                    <li><a href="#"><c:out value="${s.sizeValue}"/></a></li>
-                                    </c:forEach>
-                                    <c:if test="${empty listSize}">
-                                    <li><span>Updating...</span></li>
-                                    </c:if>
+                                    <c:set var="activeSize" value="${selectedSizeId == s.sizeID}" />
+                                    <c:set var="disabledSize"
+                                           value="${ (not empty allowedSizes and not allowedSizes.contains(s.sizeID))
+                                                     or (empty allowedSizes and selectedColorId ne null) }" />
+
+                                    <li>
+                                        <c:choose>
+                                            <c:when test="${disabledSize}">
+                                                <span class="disabled"><c:out value="${s.sizeValue}"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:choose>
+                                                    <c:when test="${selectedColorId ne null}">
+                                                        <c:url var="sizeUrl" value="/ProductDetail">
+                                                            <c:param name="pid" value="${pro.id}"/>
+                                                            <c:param name="sizeId" value="${s.sizeID}"/>
+                                                            <c:param name="colorId" value="${selectedColorId}"/>
+                                                        </c:url>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:url var="sizeUrl" value="/ProductDetail">
+                                                            <c:param name="pid" value="${pro.id}"/>
+                                                            <c:param name="sizeId" value="${s.sizeID}"/>
+                                                        </c:url>
+                                                    </c:otherwise>
+                                                </c:choose>
+
+                                                <a class="${activeSize ? 'selected' : ''}" href="${sizeUrl}">
+                                                    <c:out value="${s.sizeValue}"/>
+                                                </a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </li>
+                                </c:forEach>
                             </ul>
                         </div>
 
-                        <!-- Colors -->
+
                         <div class="block-26 mb-4">
                             <h4>Color</h4>
                             <ul>
                                 <c:forEach var="cl" items="${listColor}">
-                                    <c:choose>
-                                        <c:when test="${cl.status == 1}">
-                                            <li><a href="#"><c:out value="${cl.colorName}"/></a></li>
+                                    <c:set var="activeColor" value="${selectedColorId == cl.colorID}" />
+                                    <c:set var="disabledColor"
+                                           value="${ (not empty allowedColors and not allowedColors.contains(cl.colorID))
+                                                     or (empty allowedColors and selectedSizeId ne null) }" />
+
+                                    <li>
+                                        <c:choose>
+                                            <c:when test="${disabledColor}">
+                                                <span class="disabled"><c:out value="${cl.colorName}"/></span>
                                             </c:when>
                                             <c:otherwise>
-                                            <li class="disabled"><span><c:out value="${cl.colorName}"/></span></li>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </c:forEach>
-                                        <c:if test="${empty listColor}">
-                                    <li><span>Updating...</span></li>
-                                    </c:if>
+                                                <c:choose>
+                                                    <c:when test="${selectedSizeId ne null}">
+                                                        <c:url var="colorUrl" value="/ProductDetail">
+                                                            <c:param name="pid" value="${pro.id}"/>
+                                                            <c:param name="sizeId" value="${selectedSizeId}"/>
+                                                            <c:param name="colorId" value="${cl.colorID}"/>
+                                                        </c:url>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:url var="colorUrl" value="/ProductDetail">
+                                                            <c:param name="pid" value="${pro.id}"/>
+                                                            <c:param name="colorId" value="${cl.colorID}"/>
+                                                        </c:url>
+                                                    </c:otherwise>
+                                                </c:choose>
+
+                                                <a class="${activeColor ? 'selected' : ''}" href="${colorUrl}">
+                                                    <c:out value="${cl.colorName}"/>
+                                                </a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </li>
+                                </c:forEach>
                             </ul>
                         </div>
 
-                        <!-- Quantity (HTML nh? c?; không JS) -->
-                        <div class="input-group mb-4">
-                            <span class="input-group-btn">
-                                <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
-                                    <i class="icon-minus2"></i>
-                                </button>
-                            </span>
-                            <input type="number" id="quantity" name="quantity"
-                                   class="form-control input-number"
-                                   value="1" min="1" max="100">
-                            <span class="input-group-btn ml-1">
-                                <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-                                    <i class="icon-plus2"></i>
-                                </button>
-                            </span>
-                        </div>
 
-                        <!-- Add to cart (gi? nh? c? là link) -->
-                        <div class="row">
-                            <div class="col-sm-12 text-center">
-                                <p class="addtocart">
-                                    <a href="${ctx}/cart" class="btn btn-primary btn-addtocart">
-                                        <i class="icon-shopping-cart"></i> Add to Cart
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
+                        <!-- Quantity + Add to Cart -->
+                        <form action="${ctx}/cart/add" method="post">
+                            <input type="hidden" name="productId" value="${pro.id}">
+                            <input type="hidden" name="sizeId"  value="${selectedSizeId}">
+                            <input type="hidden" name="colorId" value="${selectedColorId}">
 
-                    </div><!-- /.product-desc -->
-                </div><!-- /.col-sm-4 -->
+                            <c:choose>
+                                
+                                <c:when test="${selectedSizeId != null && selectedColorId != null && currentStock > 0}">
+                                    <div class="input-group mb-4">
+                                        
 
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </div><!-- /.colorlib-product -->
-    
+                                        
+                                        <input type="number" id="quantity" name="quantity"
+                                               class="form-control input-number"
+                                               value="1" min="1" max="${currentStock}"/>
+
+                                        
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12 text-center">
+                                            <p class="addtocart">
+                                                
+                                                <button type="submit" class="btn btn-primary btn-addtocart">
+                                                    <i class="icon-shopping-cart"></i> Add to Cart
+                                                </button>
+                                            </p>
+                                            <div class="mt-2"><small>Stock: ${currentStock}</small></div>
+                                        </div>
+                                    </div>
+                                </c:when>
+
+                                
+                                <c:otherwise>
+                                    <div class="input-group mb-4">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="" disabled>
+                                                <i class="icon-minus2"></i>
+                                            </button>
+                                        </span>
+
+                                        <input type="number" id="quantity" name="quantity"
+                                               class="form-control input-number"
+                                               value="0" min="0" max="0" disabled/>
+
+                                        <span class="input-group-btn ml-1">
+                                            <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="" disabled>
+                                                <i class="icon-plus2"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12 text-center">
+                                            <p class="addtocart">
+                                                <button type="button" class="btn btn-secondary btn-addtocart" disabled>
+                                                    <i class="icon-shopping-cart"></i> Choose Size &amp; Color
+                                                </button>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <%@ include file="footer.jspf" %>
-    <script>
-		$(document).ready(function(){
 
-		var quantitiy=0;
-		   $('.quantity-right-plus').click(function(e){
-		        
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		            
-		            $('#quantity').val(quantity + 1);
 
-		          
-		            // Increment
-		        
-		    });
 
-		     $('.quantity-left-minus').click(function(e){
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		      
-		            // Increment
-		            if(quantity>0){
-		            $('#quantity').val(quantity - 1);
-		            }
-		    });
-		    
-		});
-	</script>
 </html>

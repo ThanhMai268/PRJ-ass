@@ -42,5 +42,10 @@ public class Color {
     public void setStatus(int Status) {
         this.Status = Status;
     }
+
+    @Override
+    public String toString() {
+        return "Color{" + "ColorID=" + ColorID + ", ColorName=" + ColorName + ", Status=" + Status + '}';
+    }
     
 }

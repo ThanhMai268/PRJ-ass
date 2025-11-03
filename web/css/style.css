@@ -9114,3 +9114,16 @@ input[type="text"] {
   transform: translateY(-2px);
 }
 
+.product-desc .price {
+    display: inline-block;
+    white-space: nowrap;
+    font-weight: 600;
+}
+.product-entry img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    max-height: 600px; 
+}

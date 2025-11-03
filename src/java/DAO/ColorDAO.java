@@ -29,7 +29,7 @@ public class ColorDAO extends DBConnect {
         String sql
                 = "SELECT c.ColorID, c.ColorName,c.Status "
                 + "FROM ProductDetail p "
-                + "JOIN Color c ON p.SizeID = c.ColorID "
+                + "JOIN Color c ON p.ColorID = c.ColorID "
                 + "WHERE p.ProductDetailID = ?";
 
         // Khử trùng lặp size

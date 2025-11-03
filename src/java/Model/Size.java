@@ -32,5 +32,10 @@ public class Size {
     public void setSizeValue(int SizeValue) {
         this.SizeValue = SizeValue;
     }
+
+    @Override
+    public String toString() {
+        return "Size{" + "SizeID=" + SizeID + ", SizeValue=" + SizeValue + '}';
+    }
     
 }
