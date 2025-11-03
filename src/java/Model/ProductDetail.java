@@ -16,6 +16,16 @@ public class ProductDetail {
    
     private int quantity;
     private int status;
+
+    public ProductDetail(int pdid, int pid, int cid, int sid, int quantity, int status) {
+        this.pdid = pdid;
+        this.pid = pid;
+        this.cid = cid;
+        this.sid = sid;
+        this.quantity = quantity;
+        this.status = status;
+    }
+    
     public ProductDetail(int pdid, int pid, int cid, int sid, int quantity) {
         this.pdid = pdid;
         this.pid = pid;

@@ -1,1 +1,53 @@
-nbproject/private/private.xml
+# =====================================
+# Build outputs (tệp sinh ra sau khi build)
+target/
+build/
+dist/
+out/
+
+# IDE configuration files (tệp cài đặt IDE)
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+*.iws
+.vscode/
+nbproject/private/
+nbbuild/
+nbdist/
+
+# Logs and temporary files (tệp tạm, log)
+*.log
+tmp/
+logs/
+.DS_Store
+Thumbs.db
+.cache/
+
+# Environment configuration files (các file môi trường)
+.env
+.env.local
+application.properties
+jdbc.properties
+
+# Database connection files (ẩn file kết nối DB)
+*DBConnect*
+*dbconnect*
+
+# Deployment / generated files (tệp khi deploy)
+*.war
+*.ear
+/webapp/WEB-INF/classes/
+/webapp/WEB-INF/lib/
+
+# Miscellaneous / backup files
+*.bak
+*.swp
+*~
+
+# NetBeans & build artifacts
+nbproject/private/
+build/
+dist/
+

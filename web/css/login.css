@@ -247,3 +247,30 @@ footer a {
     color: #3c97bf;
     text-decoration: none;
 }
+.toast {
+  position: fixed;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 280px;
+  text-align: center;
+  background-color: #4CAF50; /* success */
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 9999;
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+.toast.show {
+  top: 20px;
+  opacity: 1;
+}
+.toast.error {
+  background-color: #f44336;
+}
+.toast.info {
+  background-color: #2196F3;
+}
