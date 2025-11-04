@@ -45,4 +45,30 @@ public class ProductDetailDAO extends DBConnect {
         }
         return list;
     }
+    
+    public ProductDetail getProductDetailByAttribute(int pid,int cid,int sid){
+        
+        String query = "select * from ProductDetail where ProductID = ? and ColorID = ? and SizeID = ?";
+        try {
+            conn = new DBConnect().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, pid);
+            ps.setInt(2, cid);
+            ps.setInt(3, sid);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new ProductDetail(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6)
+                );
+            }
+        } catch (Exception e) {
+            setErrorCode(-1);//lỗi lệnh SQL
+            return null;
+        }
+        return null;
+    }
 }

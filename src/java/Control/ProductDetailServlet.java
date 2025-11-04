@@ -114,7 +114,7 @@ public class ProductDetailServlet extends HttpServlet {
         // 6) Gắn attribute về JSP
         request.setAttribute("pro", pro);
         
-        request.setAttribute("listprode", listprode);
+//        request.setAttribute("listprode", listprode);
         request.setAttribute("listSize", listSize);
         request.setAttribute("listColor", listColor);
 
