@@ -29,7 +29,7 @@ public class ColorDAO extends DBConnect {
         String sql
                 = "SELECT c.ColorID, c.ColorName,c.Status "
                 + "FROM ProductDetail p "
-                + "JOIN Color c ON p.SizeID = c.ColorID "
+                + "JOIN Color c ON p.ColorID = c.ColorID "
                 + "WHERE p.ProductDetailID = ?";
 
         // Khử trùng lặp size
@@ -56,5 +56,24 @@ public class ColorDAO extends DBConnect {
             return null;
         }
         return listColor;
+    }
+    
+    public String getColorNameById(int cid) {
+        
+        String query = "select ColorName from Color where ColorID = ?";
+        String colorName = "";
+        try {
+            conn = new DBConnect().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, cid);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (Exception e) {
+            setErrorCode(-1);//lỗi lệnh SQL
+            return "";
+        }
+        return "";
     }
 }

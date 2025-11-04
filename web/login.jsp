@@ -12,14 +12,22 @@
 
     </head>
     <body>
-
+        <c:if test="${param.errorCart == '1'}">
+            <div id="toast" class="toast error"> Please log in to view your cart.</div>
+        </c:if>
         <!--<h2>Weekly Coding Challenge #1: Sign in/up Form</h2>-->
+        <c:if test="${param.errorAddToCart == '1'}">
+            <div id="toast" class="toast error"> You must log in before adding products to your cart.</div>
+        </c:if>
+
         <c:if test="${not empty successSignup}">
             <div id="toast" class="toast">${successSignup}</div>
         </c:if>
+            
         <c:if test="${not empty errorSignup}">
             <div id="toast" class="toast error">${errorSignup}</div>
         </c:if>
+            
         <c:if test="${not empty errorLogin}">
             <div id="toast" class="toast error">${errorLogin}</div>
         </c:if>

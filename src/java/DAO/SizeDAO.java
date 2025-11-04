@@ -60,4 +60,23 @@ public class SizeDAO extends DBConnect {
         }
         return listSize;
     }
+    
+    public String getSizeValueById(int sid) {
+        
+        String query = "select SizeValue from Size where SizeID = ?";
+        String sizeValue = "";
+        try {
+            conn = new DBConnect().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, sid);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (Exception e) {
+            setErrorCode(-1);//lỗi lệnh SQL
+            return "";
+        }
+        return "";
+    }
 }
