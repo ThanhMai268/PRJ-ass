@@ -136,50 +136,56 @@
 
 
                         <!-- Quantity + Add to Cart -->
-                        <form action="${ctx}/cart/add" method="post">
+                        <form action="${ctx}/CartAdd" method="post">
+                            <!-- G?i thông tin s?n ph?m -->
                             <input type="hidden" name="productId" value="${pro.id}">
                             <input type="hidden" name="sizeId"  value="${selectedSizeId}">
                             <input type="hidden" name="colorId" value="${selectedColorId}">
 
-                            <c:choose>
-                                
-                                <c:when test="${selectedSizeId != null && selectedColorId != null && currentStock > 0}">
-                                    <div class="input-group mb-4">
-                                        
+                            <%-- Ki?m tra ??ng nh?p và ?i?u ki?n cho phép add --%>
+                            <c:set var="isLoggedIn" value="${not empty sessionScope.acc or not empty sessionScope.user}"/>
+                            <c:set var="canAdd" value="${selectedSizeId != null && selectedColorId != null && currentStock > 0}"/>
 
-                                        
+                            <c:choose>
+                                <%-- ?ã ch?n size & color, còn hàng --%>
+                                <c:when test="${canAdd}">
+                                    <div class="input-group mb-4">
                                         <input type="number" id="quantity" name="quantity"
                                                class="form-control input-number"
                                                value="1" min="1" max="${currentStock}"/>
-
-                                        
                                     </div>
 
                                     <div class="row">
                                         <div class="col-sm-12 text-center">
                                             <p class="addtocart">
-                                                
-                                                <button type="submit" class="btn btn-primary btn-addtocart">
-                                                    <i class="icon-shopping-cart"></i> Add to Cart
-                                                </button>
+                                                <c:choose>
+                                                    <%-- ? ?ã ??ng nh?p --%>
+                                                    <c:when test="${isLoggedIn}">
+                                                        <button type="submit" class="btn btn-primary btn-addtocart">
+                                                            <i class="icon-shopping-cart"></i> Add to Cart
+                                                        </button>
+                                                    </c:when>
+
+                                                    <%-- ? Ch?a ??ng nh?p --%>
+                                                    <c:otherwise>
+                                                        <a href="${ctx}/CartAdd" class="btn btn-primary btn-addtocart">
+                                                            <i class="icon-shopping-cart"></i> Add to Cart
+                                                        </a>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </p>
                                             <div class="mt-2"><small>Stock: ${currentStock}</small></div>
                                         </div>
                                     </div>
                                 </c:when>
 
-                                
+                                <%-- Ch?a ch?n size ho?c color thì disable --%>
                                 <c:otherwise>
                                     <div class="input-group mb-4">
-                                        
-
                                         <input type="number" id="quantity" name="quantity"
                                                class="form-control input-number"
                                                value="0" min="0" max="0" disabled/>
-
-                                        
                                     </div>
-
                                     <div class="row">
                                         <div class="col-sm-12 text-center">
                                             <p class="addtocart">
@@ -192,6 +198,8 @@
                                 </c:otherwise>
                             </c:choose>
                         </form>
+
+
 
                     </div>
                 </div>
