@@ -9114,3 +9114,25 @@ input[type="text"] {
   transform: translateY(-2px);
 }
 
+.product-desc .price {
+    display: inline-block;
+    white-space: nowrap;
+    font-weight: 600;
+}
+.product-entry img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    max-height: 600px; 
+}
+.closed-btn {
+  width: 24px; height: 24px; line-height: 24px;
+  text-align: center; font-size: 20px; 
+  border: 0; background: transparent; cursor: pointer;
+  /* Hoặc dùng background image:
+  background: url('${ctx}/images/icon-remove.svg') no-repeat center/contain;
+  color: transparent;
+  */
+}

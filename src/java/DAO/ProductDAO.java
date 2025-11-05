@@ -69,7 +69,7 @@ public class ProductDAO extends DBConnect {
 
     public Product getProductById(int pid) {
         List<Product> list = new ArrayList<>();
-        String query = "select * from product where ProductID = = ?";
+        String query = "select * from Product where ProductID = ?";
         try {
             conn = new DBConnect().getConnection();//mo ket noi voi sql
             ps = conn.prepareStatement(query);
@@ -79,7 +79,10 @@ public class ProductDAO extends DBConnect {
                 return new Product(rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
-                        rs.getDouble(4)
+                        rs.getDouble(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getInt(7)
                 );
             }
         } catch (Exception e) {
@@ -126,4 +129,6 @@ public class ProductDAO extends DBConnect {
         }
         return list;
     }
+    
+    
 }

@@ -45,3 +45,9 @@ jdbc.properties
 *.bak
 *.swp
 *~
+
+# NetBeans & build artifacts
+nbproject/private/
+build/
+dist/
+
