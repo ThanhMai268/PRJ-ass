@@ -7,6 +7,7 @@ package Control;
 
 import DAO.OverviewDAO; 
 import Model.Account; 
+import Model.BestSeller;
 import java.util.List;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,8 +22,8 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author ADMIN
  */
-@WebServlet(name="OverviewController", urlPatterns={"/OverviewController"})
-public class OverviewController extends HttpServlet {
+@WebServlet(name="OverviewServlet", urlPatterns={"/OverviewServlet"})
+public class OverviewServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -47,20 +48,20 @@ public class OverviewController extends HttpServlet {
         OverviewDAO dao = new OverviewDAO();
         
         long totalRevenue = dao.getTotalRevenue();
-        int totalOrders = dao.getTotalOrders();
+        int totalOrders = dao.getTotalMonthlyOrders();
         int purchasingCustomers = dao.getPurchasingCustomers();
         int totalItemsSold = dao.getTotalItemsSold();
-        List<String> bestSellersList = dao.getBestSellers(5); 
+        List<BestSeller> bestSellersList = dao.getBestSellers(3); 
 
         // 3. Đặt dữ liệu vào request
-        request.setAttribute("revenue", totalRevenue);
-        request.setAttribute("orders", totalOrders);
-        request.setAttribute("customers", purchasingCustomers);
+        request.setAttribute("totalRevenue", totalRevenue);
+        request.setAttribute("monthlyOrders", totalOrders);
+        request.setAttribute("purchasingCustomers", purchasingCustomers);
         request.setAttribute("itemsSold", totalItemsSold);
         request.setAttribute("bestSellers", bestSellersList); 
         
         // 4. Chuyển tiếp đến JSP
-        request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
