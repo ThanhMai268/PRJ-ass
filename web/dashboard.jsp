@@ -40,6 +40,15 @@
         <!-- bootstrap wysihtml5 - text editor -->
         <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
+        <style>
+        /* Căn giữa và tăng cỡ chữ cho bảng Best Sellers */
+        #bestSellerBox .table > tbody > tr > td,
+        #bestSellerBox .table > thead > tr > th {
+            text-align: center;
+            vertical-align: middle !important;
+            font-size: 15px; 
+        }
+    </style>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -157,55 +166,62 @@
                 <!-- Main content -->
                 <section class="content">
                     <div class="row">
+
                         <div class="col-lg-3 col-xs-6">
                             <div class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <fmt:formatNumber value="${requestScope.revenue}" type="number" pattern="#,##0"/>
+                                        <fmt:setLocale value="en_US"/>
+                                        <fmt:formatNumber value="${totalRevenue}" type="currency" currencyCode="USD"/>
                                     </h3>
                                     <p>Total Revenue</p>
                                 </div>
                                 <div class="icon">
-                                    <i class="ion ion-cash"></i>
+                                    <i class="ion ion-stats-bars"></i>
                                 </div>
+                                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
 
                         <div class="col-lg-3 col-xs-6">
                             <div class="small-box bg-aqua">
                                 <div class="inner">
-                                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                                    <h3><c:out value="${monthlyOrders}" default="0"/></h3>
                                     <p>Monthly Orders</p>
                                 </div>
                                 <div class="icon">
-                                    <i class="ion ion-ios-cart"></i>
+                                    <i class="ion ion-bag"></i>
                                 </div>
+                                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
 
                         <div class="col-lg-3 col-xs-6">
                             <div class="small-box bg-yellow">
                                 <div class="inner">
-                                    <h3>44</h3>
+                                    <h3><c:out value="${purchasingCustomers}" default="0"/></h3>
                                     <p>Purchasing Customers</p>
                                 </div>
                                 <div class="icon">
-                                    <i class="ion ion-person-stalker"></i>
+                                    <i class="ion ion-person-add"></i>
                                 </div>
+                                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
 
                         <div class="col-lg-3 col-xs-6">
                             <div class="small-box bg-red">
                                 <div class="inner">
-                                    <h3>65</h3>
+                                    <h3><c:out value="${itemsSold}" default="0"/></h3>
                                     <p>Items Sold</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
                                 </div>
+                                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- /.content-wrapper -->
@@ -216,13 +232,10 @@
                             <!-- BAR CHART -->
                             <div class="box box-success">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Bar Chart</h3>
-
-                                    <div class="box-tools pull-right">
-                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                                    </div>
+                                    <h3 class="box-title" style="font-size: 25px;">
+                                        <i class="fa fa-bar-chart"></i> 
+                                        Bar Chart
+                                    </h3>
                                 </div>
                                 <div class="box-body">
                                     <div class="chart">
@@ -234,51 +247,79 @@
                             <!-- /.box -->
                             <div class="box box-success">
                                 <div class="box-header">
-                                    <i class="fa fa-bell-o"></i>
-                                    <h3 class="box-title">Notifications</h3>
+                                    <h3 class="box-title" style="font-size: 25px;">
+                                        <i class="fa fa-bell-o"></i> 
+                                        Notifications
+                                    </h3>
                                 </div>
                                 <div class="box-body">
-                                    
-                                    
+                                    <div style="height: 250px; width: 100%;"></div>
                                 </div>
                             </div>
                         </div>
                         <!-- Map box -->
                         <div class="col-md-6">
-                            <div class="box box-solid bg-teal-gradient">
-                                <div class="box-header">
-                                    <!-- tools box -->
-                                    <div class="pull-right box-tools">
-                                        <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="Collapse" style="margin-right: 5px;">
-                                            <i class="fa fa-minus"></i></button>
-                                    </div>
-                                    <!-- /. tools -->
 
+                            <div class="box box-solid bg-aqua" id="bestSellerBox">
+
+                                <div class="box-header">
+                                    <div class="pull-right box-tools">
+                                        <button type="button" class="btn btn-default btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="Collapse" style="margin-right: 5px;">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
                                     <i class="fa ion-ribbon-b"></i>
 
-                                    <h3 class="box-title">
+                                    <h3 class="box-title" style="font-size: 40px; font-weight: bool;">
                                         Best Sellers
                                     </h3>
                                 </div>
-                                <div class="box-body">
-                                    <div id="world-map" style="height: 250px; width: 100%;"></div>
+
+                                <div class="box-body no-padding">
+
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 100px; font-size: 18px">#</th>
+                                                <th style="width: 100px; font-size: 18px">Image</th>
+                                                <th style="font-size: 18px">Product Name</th>
+                                                <th style="font-size: 18px">Sold</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="item" items="${bestSellers}" varStatus="loop">
+                                                <tr>
+                                                    <td style="font-size: 20px;">#${loop.count}</td>
+                                                    <td>
+                                                        <img src="${pageContext.request.contextPath}/images/${item.imageUrl}" alt="Ảnh" style="width: 50px; height: 50px; object-fit: cover;">
+                                                    </td>
+                                                    <td>${item.name}</td>
+                                                    <td style="font-size: 20px;">${item.sold}</td>
+                                                </tr>
+                                            </c:forEach>
+
+                                            <c:if test="${empty bestSellers}">
+                                                <tr>
+                                                    <td colspan="4" class="text-center">Chưa có sản phẩm bán chạy.</td>
+                                                </tr>
+                                            </c:if>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <!-- /.box-body-->
                             </div>
                         </div>
-                    </div>
-                    <!-- jQuery 2.2.3 -->
-                    <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
-                    <!-- Bootstrap 3.3.6 -->
-                    <script src="bootstrap/js/bootstrap.min.js"></script>
-                    <!-- SlimScroll -->
-                    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
-                    <!-- FastClick -->
-                    <script src="plugins/fastclick/fastclick.js"></script>
-                    <!-- AdminLTE App -->
-                    <script src="dist/js/app.min.js"></script>
-                    <!-- AdminLTE for demo purposes -->
-                    <script src="dist/js/demo.js"></script>
+                        <!-- jQuery 2.2.3 -->
+                        <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+                        <!-- Bootstrap 3.3.6 -->
+                        <script src="bootstrap/js/bootstrap.min.js"></script>
+                        <!-- SlimScroll -->
+                        <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+                        <!-- FastClick -->
+                        <script src="plugins/fastclick/fastclick.js"></script>
+                        <!-- AdminLTE App -->
+                        <script src="dist/js/app.min.js"></script>
+                        <!-- AdminLTE for demo purposes -->
+                        <script src="dist/js/demo.js"></script>
 
                 </section>
             </div>
