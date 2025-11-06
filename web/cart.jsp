@@ -4,6 +4,9 @@
 <!DOCTYPE HTML>
 <html>
     <%@ include file="/header.jspf" %>
+    
+
+
 
     <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
@@ -83,10 +86,12 @@
                                         <input type="hidden" name="colorId"   value="${it.colorId}">
                                         <input type="hidden" name="sizeId"    value="${it.sizeId}">
 
+                                        <input type="hidden" name="quantity" value="${it.quantity}" min="1" max="999999">
+
                                         <div class="input-group justify-content-center" style="gap:6px;">
                                             <button type="button" class="btn btn-outline-secondary btn-sm qty-btn" data-step="-1" aria-label="Decrease">−</button>
-                                            <input type="number" name="quantity" value="${it.quantity}" min="1"
-                                                   class="form-control input-number text-center" style="width:80px;">
+                                            <!-- chỉ hiển thị -->
+                                            <span class="qty-display text-center" style="width:80px; display:inline-block;">${it.quantity}</span>
                                             <button type="button" class="btn btn-outline-secondary btn-sm qty-btn" data-step="1" aria-label="Increase">+</button>
                                         </div>
                                     </form>
@@ -165,21 +170,25 @@
                 return;
 
             const form = btn.closest('.qty-form');
-            const input = form.querySelector('input[name="quantity"]');
+            const input = form.querySelector('input[name="quantity"]'); // input ẩn
+            const display = form.querySelector('.qty-display');         // text hiển thị
+
             const step = parseInt(btn.dataset.step || '0', 10);
             const min = parseInt(input.min || '1', 10);
             const max = parseInt(input.max || '999999', 10);
             let val = parseInt(input.value || '1', 10);
 
-            // tính giá trị mới trong khoảng [min, max]
             const next = Math.max(min, Math.min(max, val + step));
             if (next === val)
-                return; // không đổi (đang ở min/max)
+                return;
 
             input.value = String(next);
-            form.submit(); // gửi action=add để ghi đè số lượng
+            if (display)
+                display.textContent = String(next); // cập nhật text
+            form.submit();
         });
     </script>
+
 
     <%@ include file="/footer.jspf" %>
 </html>

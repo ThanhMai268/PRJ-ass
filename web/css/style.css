@@ -9131,8 +9131,61 @@ input[type="text"] {
   width: 24px; height: 24px; line-height: 24px;
   text-align: center; font-size: 20px; 
   border: 0; background: transparent; cursor: pointer;
-  /* Hoặc dùng background image:
-  background: url('${ctx}/images/icon-remove.svg') no-repeat center/contain;
-  color: transparent;
-  */
+ 
 }
+/* 1) Khóa lại lưới cột giống nhau giữa header và các hàng */
+.product-name > .one-forth,
+.product-cart  > .one-forth { flex: 0 0 50%; max-width: 50%; }
+
+.product-name > .one-eight,
+.product-cart  > .one-eight { flex: 0 0 12.5%; max-width: 12.5%; }
+
+/* 2) Căn giữa theo trục dọc toàn hàng */
+.product-cart { align-items: center; }
+
+/* 3) Cụm bên trái: ảnh + chữ canh trái, không bị đẩy lệch */
+.product-cart .one-forth { display:flex; align-items:center; gap:14px; min-width:300px; }
+.product-cart .product-img{
+  width:80px; height:80px; background-size:cover; background-position:center;
+  border-radius:6px; flex-shrink:0;
+}
+.product-cart .one-forth .display-tc{
+  display:flex; flex-direction:column; align-items:flex-start;
+  text-align:left; margin-left:0;   /* xóa mọi margin-left trước đó */
+}
+.product-cart .one-forth .display-tc h3{
+  margin:0 0 4px 0; line-height:1.25; font-size:16px; font-weight:600;
+}
+.product-cart .one-forth .display-tc small{
+  color:#6b7280; font-size:13px; line-height:1.2;
+}
+
+/* 4) Căn giữa nội dung các cột số (Price/Qty/Total/Remove) */
+.product-cart .one-eight .display-tc{
+  display:flex; align-items:center; justify-content:center; min-height:80px;
+}
+
+/* 5) Thu gọn – 1 + và ép bỏ width inline 80px */
+.qty-form .input-group{
+  display:inline-flex !important; align-items:center; justify-content:center;
+  gap:4px !important; width: 96px !important;
+}
+.qty-btn{
+  width:28px !important; height:28px !important; line-height:26px !important;
+  padding:0 !important; font-size:16px; border-radius:50%;
+  border:1px solid #ccc; background:#fff;
+}
+.qty-display{
+  width:24px !important; display:inline-block !important;  /* ghi đè inline style cũ */
+  text-align:center; font-weight:600; font-size:15px;
+}
+
+/* 6) Giá/Tổng không xuống dòng */
+.price{ white-space:nowrap; font-weight:600; }
+
+/* 7) Nút remove căn giữa và màu xám */
+.closed-btn{
+  background:transparent; border:none; padding:0;
+  font-size:20px; line-height:1; color:#9aa0a6; cursor:pointer; text-decoration:none !important;
+}
+.closed-btn:hover{ color:#e74c3c; }
