@@ -5,6 +5,7 @@
 package DAO;
 
 import Model.BestSeller;
+import jakarta.servlet.annotation.WebServlet;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,15 +43,7 @@ public class OverviewDAO extends DBConnect {
         } catch (Exception e) {
             setErrorCode(-1);
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conn != null && !conn.isClosed()) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return revenue;
     }
 
@@ -76,15 +69,7 @@ public class OverviewDAO extends DBConnect {
         } catch (Exception e) {
             setErrorCode(-1);
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conn != null && !conn.isClosed()) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return count;
     }
 
@@ -106,15 +91,7 @@ public class OverviewDAO extends DBConnect {
         } catch (Exception e) {
             setErrorCode(-1);
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conn != null && !conn.isClosed()) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return count;
     }
 
@@ -140,15 +117,7 @@ public class OverviewDAO extends DBConnect {
         } catch (Exception e) {
             setErrorCode(-1);
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conn != null && !conn.isClosed()) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return count;
     }
 
@@ -182,16 +151,52 @@ public class OverviewDAO extends DBConnect {
         } catch (Exception e) {
             setErrorCode(-1);
             e.printStackTrace();
-        } finally {
-            // SỬA LỖI 2: Đóng tất cả tài nguyên
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conn != null && !conn.isClosed()) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } 
         return list;
+    }
+    
+    public Map<String, Integer> getMonthlySalesData() {
+        // Dùng LinkedHashMap để giữ nguyên thứ tự các tháng
+        Map<String, Integer> salesData = new LinkedHashMap<>();
+        Calendar cal = Calendar.getInstance();
+        int currentYear = cal.get(Calendar.YEAR);
+        for (int month = 1; month <= 12; month++) {
+        // Key là chuỗi số tháng, ví dụ: "1", "2", ... "12"
+        String monthKey = String.valueOf(month); 
+        salesData.put(monthKey, 0);
+        }
+    
+        String query = "SELECT " +
+                   "    MONTH(O.OrderDate) AS SaleMonth, " +
+                   "    SUM(OD.Quantity) AS TotalQuantity " +
+                   "FROM [Order] O " +
+                   "JOIN OrderDetail OD ON O.OrderID = OD.OrderID " +
+                   "WHERE O.Status = ? " +
+                   "    AND YEAR(O.OrderDate) = ? " + // Lọc theo năm hiện tại
+                   "GROUP BY MONTH(O.OrderDate) " +
+                   "ORDER BY SaleMonth";
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            openConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, STATUS_COMPLETED);
+            ps.setInt(2, currentYear);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                int month = rs.getInt("SaleMonth");
+                int quantity = rs.getInt("TotalQuantity");
+                
+                String monthKey = String.valueOf(month);
+                salesData.put(monthKey, quantity);
+            }
+        } catch (Exception e) {
+            setErrorCode(-1);
+            e.printStackTrace();
+        }
+        return salesData;
     }
 }
