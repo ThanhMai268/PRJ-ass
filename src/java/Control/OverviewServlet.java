@@ -8,6 +8,7 @@ package Control;
 import DAO.OverviewDAO; 
 import Model.Account; 
 import Model.BestSeller;
+import Model.OrderNotification;
 import java.util.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -44,10 +45,10 @@ public class OverviewServlet extends HttpServlet {
         }
         
         OverviewDAO dao = new OverviewDAO();
-        long totalRevenue = dao.getTotalRevenue();
+        long monthlyRevenue = dao.getTotalMonthlyRevenue();
         int totalOrders = dao.getTotalMonthlyOrders();
-        int purchasingCustomers = dao.getPurchasingCustomers();
-        int totalItemsSold = dao.getTotalItemsSold();
+        int monthlyCustomers = dao.getMonthlyPurchasingCustomers();
+        int monthlyItemsSold = dao.getMonthlyItemsSold();
         
         Map<String, Integer> salesData = dao.getMonthlySalesData();
         // Tách Map thành 2 List riêng biệt
@@ -55,17 +56,19 @@ public class OverviewServlet extends HttpServlet {
         List<Integer> chartValues = new ArrayList<>(salesData.values());// số liệu cột tương ứng
         
         List<BestSeller> bestSellersList = dao.getBestSellers(3); 
+        List<OrderNotification> notificationList = dao.getNewOrderNotifications();
         
         // Đặt dữ liệu vào request
-        request.setAttribute("totalRevenue", totalRevenue);
+        request.setAttribute("monthlyRevenue", monthlyRevenue);
         request.setAttribute("monthlyOrders", totalOrders);
-        request.setAttribute("purchasingCustomers", purchasingCustomers);
-        request.setAttribute("itemsSold", totalItemsSold);
+        request.setAttribute("monthlyCustomers", monthlyCustomers); 
+        request.setAttribute("monthlyItemsSold", monthlyItemsSold);
         request.setAttribute("chartLabels", chartLabels);
         request.setAttribute("chartValues", chartValues);
         request.setAttribute("bestSellers", bestSellersList); 
+        request.setAttribute("notificationList", notificationList);
         
-        // 4. Chuyển tiếp đến JSP
+        // Chuyển tiếp đến JSP
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
     
