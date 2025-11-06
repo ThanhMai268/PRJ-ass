@@ -5,6 +5,7 @@
 package DAO;
 
 import Model.BestSeller;
+import Model.OrderNotification;
 import jakarta.servlet.annotation.WebServlet;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,8 +26,12 @@ public class OverviewDAO extends DBConnect {
     }
 
     // Lấy Tổng Doanh thu
-    public long getTotalRevenue() {
-        String query = "SELECT SUM(OD.Quantity * OD.Price) AS TotalRevenue FROM [Order] O JOIN OrderDetail OD ON O.OrderID = OD.OrderID WHERE O.Status = ?";
+    public long getTotalMonthlyRevenue() {
+        String query = "SELECT SUM(OD.Quantity * OD.Price) AS TotalRevenue "
+                + "FROM [Order] O JOIN OrderDetail OD ON O.OrderID = OD.OrderID "
+                + "WHERE O.Status = ? "
+                + "AND O.OrderDate >= DATEADD(month, DATEDIFF(month, 0, GETDATE()), 0) "
+                + "AND O.OrderDate < DATEADD(month, DATEDIFF(month, 0, GETDATE()) + 1, 0)";
         long revenue = 0;
         
         PreparedStatement ps = null;
@@ -74,8 +79,11 @@ public class OverviewDAO extends DBConnect {
     }
 
     // Đếm Số lượng Khách hàng Mua hàng Duy nhất
-    public int getPurchasingCustomers() {
-        String query = "SELECT COUNT(DISTINCT CustomerID) AS PurchasingCustomers FROM [Order]";
+    public int getMonthlyPurchasingCustomers() {
+        String query = "SELECT COUNT(DISTINCT CustomerID) AS PurchasingCustomers "
+                + "FROM [Order] O " // Thêm alias 'O'
+                + "WHERE O.OrderDate >= DATEADD(month, DATEDIFF(month, 0, GETDATE()), 0) "
+                + "AND O.OrderDate < DATEADD(month, DATEDIFF(month, 0, GETDATE()) + 1, 0)";
         int count = 0;
         
         PreparedStatement ps = null;
@@ -96,10 +104,12 @@ public class OverviewDAO extends DBConnect {
     }
 
     // Đếm Tổng Mặt hàng đã bán
-    public int getTotalItemsSold() {
+    public int getMonthlyItemsSold() {
         String query = "SELECT SUM(OD.Quantity) AS TotalItemsSold FROM [Order] O "
-                     + "INNER JOIN OrderDetail OD ON O.OrderID = OD.OrderID "
-                     + "WHERE O.Status = ?";
+                + "INNER JOIN OrderDetail OD ON O.OrderID = OD.OrderID "
+                + "WHERE O.Status = ? "
+                + "AND O.OrderDate >= DATEADD(month, DATEDIFF(month, 0, GETDATE()), 0) "
+                + "AND O.OrderDate < DATEADD(month, DATEDIFF(month, 0, GETDATE()) + 1, 0)";
         int count = 0;
         
         PreparedStatement ps = null;
@@ -198,5 +208,38 @@ public class OverviewDAO extends DBConnect {
             e.printStackTrace();
         }
         return salesData;
+    }
+    
+    public List<OrderNotification> getNewOrderNotifications() {
+        List<OrderNotification> list = new ArrayList<>();
+        String query = "SELECT O.OrderID, C.CustomerName, " +
+                       "    SUM(OD.Quantity * OD.Price) AS TotalValue " +
+                       "FROM [Order] O " +
+                       "JOIN Customer C ON O.CustomerID = C.CustomerID " +
+                       "JOIN OrderDetail OD ON O.OrderID = OD.OrderID " +
+                       "WHERE O.Status = 0 " + // Chỉ lấy đơn hàng mới
+                       "GROUP BY O.OrderID, C.CustomerName " +
+                       "ORDER BY O.OrderID DESC"; // Các đơn mới nhất lên đầu
+        
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            openConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                list.add(new OrderNotification(
+                    rs.getInt("OrderID"),
+                    rs.getString("CustomerName"),
+                    rs.getDouble("TotalValue")
+                ));
+            }
+        } catch (Exception e) {
+            setErrorCode(-1);
+            e.printStackTrace();
+        } 
+        return list;
     }
 }

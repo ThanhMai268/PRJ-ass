@@ -61,7 +61,7 @@
 
             <header class="main-header">
                 <!-- Logo -->
-                <a href="index2.html" class="logo">
+                <a href="${pageContext.request.contextPath}/OverviewServlet" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
                     <span class="logo-mini"><b>S</b>S</span>
                     <!-- logo for regular state and mobile devices -->
@@ -137,7 +137,7 @@
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="active treeview">
-                            <a href="#">
+                            <a href="${pageContext.request.contextPath}/OverviewServlet">
                                 <i class="fa fa-cogs"></i> <span>Overview</span>
                             </a>
                         </li>
@@ -172,9 +172,9 @@
                                 <div class="inner">
                                     <h3>
                                         <fmt:setLocale value="en_US"/>
-                                        <fmt:formatNumber value="${totalRevenue}" type="currency" currencyCode="USD"/>
+                                        <fmt:formatNumber value="${monthlyRevenue}" type="currency" currencyCode="USD"/>
                                     </h3>
-                                    <p>Total Revenue</p>
+                                    <p>Monthly Revenue</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -199,8 +199,8 @@
                         <div class="col-lg-3 col-xs-6">
                             <div class="small-box bg-yellow">
                                 <div class="inner">
-                                    <h3><c:out value="${purchasingCustomers}" default="0"/></h3>
-                                    <p>Purchasing Customers</p>
+                                    <h3><c:out value="${monthlyCustomers}" default="0"/></h3>
+                                    <p>Monthly Customers</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -212,8 +212,8 @@
                         <div class="col-lg-3 col-xs-6">
                             <div class="small-box bg-red">
                                 <div class="inner">
-                                    <h3><c:out value="${itemsSold}" default="0"/></h3>
-                                    <p>Items Sold</p>
+                                    <h3><c:out value="${monthlyItemsSold}" default="0"/></h3>
+                                    <p>Monthly Items Sold</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
@@ -252,8 +252,25 @@
                                         Notifications
                                     </h3>
                                 </div>
-                                <div class="box-body">
-                                    <div style="height: 250px; width: 100%;"></div>
+                                <div class="box-body" style="height: 250px; width: 100%; overflow-y: auto;">
+
+                                    <c:if test="${empty notificationList}">
+                                        <p style="padding: 10px; color: #777;">Không có thông báo mới.</p>
+                                    </c:if>
+
+                                    <ul style="list-style-type: none; padding-left: 10px;">
+                                        <c:forEach var="noti" items="${notificationList}">
+                                            <li style="padding: 8px 0; border-bottom: 1px solid #f4f4f4;">
+                                                <fmt:formatNumber value="${noti.totalValue}" type="currency" currencySymbol="" minFractionDigits="0" var="formattedTotal" />
+
+                                                <i class="fa fa.fa-shopping-cart text-green"></i> 
+                                                Bạn vừa có đơn hàng mới từ <strong>${noti.customerName}</strong>
+                                                có mã đơn hàng <strong>#${noti.orderId}</strong>
+                                                với tổng giá trị <strong>${formattedTotal}đ</strong>.
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+
                                 </div>
                             </div>
                         </div>
@@ -379,7 +396,7 @@
                                 });
                             });
                         </script>
-                        
+
                         <!-- Bootstrap 3.3.6 -->
                         <script src="bootstrap/js/bootstrap.min.js"></script>
                         <!-- SlimScroll -->
