@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-=======
 USE ShoeShopDB;
 GO
 
->>>>>>> main
 INSERT INTO Account (Email, Password, Role) VALUES
 ('admin', 'admin123', '1'),
 ('a@gmail.com', '123', '2'),
@@ -47,50 +44,6 @@ INSERT INTO Product (ProductName, Image, Price, Category, Brand) VALUES
 (N'Nike ZoomX', 'nike5.jpg', 4200000, N'Running Shoes', N'Nike');
 GO
 
-<<<<<<< HEAD
-INSERT INTO ProductDetail (ProductID, ColorID, SizeID, Quantity)
-VALUES
--- Adidas Ultraboost
-(1, 1, 2, 30), (1, 2, 3, 25), (1, 3, 4, 20),
--- Adidas Superstar
-(2, 4, 2, 18), (2, 1, 3, 22), (2, 2, 4, 15),
--- Nike Air Force 1
-(3, 1, 2, 28), (3, 2, 3, 24), (3, 3, 4, 20),
--- Nike Air Max
-(4, 4, 2, 26), (4, 1, 3, 18), (4, 2, 4, 20),
--- Converse Chuck Taylor
-(5, 1, 2, 30), (5, 2, 3, 25), (5, 3, 4, 18),
--- Converse Run Star Hike
-(6, 4, 2, 26), (6, 1, 3, 20), (6, 2, 4, 15),
--- Bitis Hunter X
-(7, 1, 2, 35), (7, 2, 3, 30), (7, 3, 4, 24),
--- Bitis Hunter Street
-(8, 4, 2, 28), (8, 1, 3, 25), (8, 2, 4, 20),
--- Puma RS-X
-(9, 1, 2, 26), (9, 2, 3, 24), (9, 3, 4, 18),
--- Puma Cali
-(10, 4, 2, 20), (10, 1, 3, 18), (10, 2, 4, 14),
--- Nike Jordan 1
-(11, 1, 2, 30), (11, 2, 3, 25), (11, 3, 4, 20),
--- Nike Dunk Low
-(12, 4, 2, 24), (12, 1, 3, 20), (12, 2, 4, 18),
--- Adidas Forum Low
-(13, 1, 2, 28), (13, 2, 3, 24), (13, 3, 4, 20),
--- Adidas Samba
-(14, 4, 2, 26), (14, 1, 3, 18), (14, 2, 4, 20),
--- Converse One Star
-(15, 1, 2, 22), (15, 2, 3, 18), (15, 3, 4, 15),
--- Bitis Hunter Core
-(16, 4, 2, 30), (16, 1, 3, 25), (16, 2, 4, 22),
--- Puma Suede Classic
-(17, 1, 2, 26), (17, 2, 3, 24), (17, 3, 4, 18),
--- Puma Future Rider
-(18, 4, 2, 22), (18, 1, 3, 20), (18, 2, 4, 16),
--- Adidas NMD R1
-(19, 1, 2, 28), (19, 2, 3, 24), (19, 3, 4, 20),
--- Nike ZoomX
-(20, 4, 2, 26), (20, 1, 3, 22), (20, 2, 4, 18);
-=======
 WITH AllProductIDs AS (
     SELECT ProductID FROM Product
 ),
@@ -112,7 +65,6 @@ CROSS JOIN
     AllColorIDs C
 CROSS JOIN
     AllSizeIDs S;
->>>>>>> main
 GO
 
 INSERT INTO [Order] (CustomerID, Status) VALUES
