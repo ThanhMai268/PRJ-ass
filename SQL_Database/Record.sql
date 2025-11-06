@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+USE ShoeShopDB;
+GO
+
+>>>>>>> main
 INSERT INTO Account (Email, Password, Role) VALUES
 ('admin', 'admin123', '1'),
 ('a@gmail.com', '123', '2'),
@@ -41,6 +47,7 @@ INSERT INTO Product (ProductName, Image, Price, Category, Brand) VALUES
 (N'Nike ZoomX', 'nike5.jpg', 4200000, N'Running Shoes', N'Nike');
 GO
 
+<<<<<<< HEAD
 INSERT INTO ProductDetail (ProductID, ColorID, SizeID, Quantity)
 VALUES
 -- Adidas Ultraboost
@@ -83,6 +90,29 @@ VALUES
 (19, 1, 2, 28), (19, 2, 3, 24), (19, 3, 4, 20),
 -- Nike ZoomX
 (20, 4, 2, 26), (20, 1, 3, 22), (20, 2, 4, 18);
+=======
+WITH AllProductIDs AS (
+    SELECT ProductID FROM Product
+),
+AllColorIDs AS (
+    SELECT ColorID FROM Color
+),
+AllSizeIDs AS (
+    SELECT SizeID FROM Size
+)
+INSERT INTO ProductDetail (ProductID, ColorID, SizeID, Quantity)
+SELECT
+    P.ProductID,
+    C.ColorID,
+    S.SizeID,
+    20 -- Quantity co dinh cho all san pham
+FROM
+    AllProductIDs P
+CROSS JOIN
+    AllColorIDs C
+CROSS JOIN
+    AllSizeIDs S;
+>>>>>>> main
 GO
 
 INSERT INTO [Order] (CustomerID, Status) VALUES
