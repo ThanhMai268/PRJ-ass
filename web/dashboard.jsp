@@ -41,14 +41,14 @@
         <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
         <style>
-        /* Căn giữa và tăng cỡ chữ cho bảng Best Sellers */
-        #bestSellerBox .table > tbody > tr > td,
-        #bestSellerBox .table > thead > tr > th {
-            text-align: center;
-            vertical-align: middle !important;
-            font-size: 15px; 
-        }
-    </style>
+            /* Căn giữa và tăng cỡ chữ cho bảng Best Sellers */
+            #bestSellerBox .table > tbody > tr > td,
+            #bestSellerBox .table > thead > tr > th {
+                text-align: center;
+                vertical-align: middle !important;
+                font-size: 15px;
+            }
+        </style>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -308,8 +308,78 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Chart.js -->
+                        <script src="dist/js/demo.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
                         <!-- jQuery 2.2.3 -->
                         <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+                        <script>
+                            // 1. Lấy dữ liệu từ Servlet (đã được JSTL render)
+                            // Dùng JSTL để in ra 2 mảng JavaScript
+                            var jsChartLabels = [
+                            <c:forEach var="label" items="${chartLabels}" varStatus="loop">
+                            "${label}"<c:if test="${!loop.last}">,</c:if>
+                            </c:forEach>
+                            ];
+
+                            var jsChartValues = [
+                            <c:forEach var="value" items="${chartValues}" varStatus="loop">
+                                ${value}<c:if test="${!loop.last}">,</c:if>
+                            </c:forEach>
+                            ];
+
+                            // 2. Chờ tài liệu load xong rồi mới vẽ (dùng jQuery)
+                            $(function () {
+                                // Lấy canvas context
+                                var barChartCanvas = $('#barChart').get(0).getContext('2d');
+                                // Định nghĩa dữ liệu cho biểu đồ
+                                var barChartData = {
+                                    labels: jsChartLabels, // Dữ liệu nhãn (trục X)
+                                    datasets: [
+                                        {
+                                            label: 'Sản phẩm bán ra',
+                                            backgroundColor: 'rgba(92, 184, 92, 0.8)', // Màu xanh lá (giống box totalRevenue)
+                                            borderColor: 'rgba(92, 184, 92, 1)',
+                                            borderWidth: 1,
+                                            data: jsChartValues // Dữ liệu số (trục Y)
+                                        }
+                                    ]
+                                };
+
+                                // Tùy chọn cho biểu đồ
+                                var barChartOptions = {
+                                    maintainAspectRatio: false,
+                                    responsive: true,
+                                    legend: {
+                                        display: false // Ẩn chú thích (vì chỉ có 1 bộ dữ liệu)
+                                    },
+                                    scales: {
+                                        xAxes: [{
+                                                gridLines: {display: false}
+                                            }],
+                                        yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: true,
+                                                    // Chỉ hiển thị số nguyên trên trục Y
+                                                    callback: function (value) {
+                                                        if (Number.isInteger(value)) {
+                                                            return value;
+                                                        }
+                                                    }
+                                                }
+                                            }]
+                                    }
+                                };
+
+                                // 3. Tạo biểu đồ
+                                new Chart(barChartCanvas, {
+                                    type: 'bar',
+                                    data: barChartData,
+                                    options: barChartOptions
+                                });
+                            });
+                        </script>
+                        
                         <!-- Bootstrap 3.3.6 -->
                         <script src="bootstrap/js/bootstrap.min.js"></script>
                         <!-- SlimScroll -->
