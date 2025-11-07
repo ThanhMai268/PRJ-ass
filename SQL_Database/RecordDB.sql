@@ -1,9 +1,14 @@
-<<<<<<< HEAD
+
 USE ShoeShopDB;
 GO
 
-=======
->>>>>>> 90012506bfa848b0ba0fe9485a9f1fe448d507cb
+
+
+
+USE ShoeShopDB;
+GO
+
+
 INSERT INTO Account (Email, Password, Role) VALUES
 ('admin', 'admin123', '1'),
 ('a@gmail.com', '123', '2'),
@@ -47,7 +52,7 @@ INSERT INTO Product (ProductName, Image, Price, Category, Brand) VALUES
 (N'Nike ZoomX', 'nike5.jpg', 4200000, N'Running Shoes', N'Nike');
 GO
 
-<<<<<<< HEAD
+
 WITH AllProductIDs AS (
     SELECT ProductID FROM Product
 ),
@@ -69,7 +74,7 @@ CROSS JOIN
     AllColorIDs C
 CROSS JOIN
     AllSizeIDs S;
-=======
+
 INSERT INTO ProductDetail (ProductID, ColorID, SizeID, Quantity)
 VALUES
 -- Adidas Ultraboost
@@ -112,7 +117,7 @@ VALUES
 (19, 1, 2, 28), (19, 2, 3, 24), (19, 3, 4, 20),
 -- Nike ZoomX
 (20, 4, 2, 26), (20, 1, 3, 22), (20, 2, 4, 18);
->>>>>>> 90012506bfa848b0ba0fe9485a9f1fe448d507cb
+
 GO
 
 INSERT INTO [Order] (CustomerID, Status) VALUES
@@ -130,7 +135,13 @@ INSERT INTO [Order] (CustomerID, Status) VALUES
 (3, 1),
 (1, 0),
 (2, 1),
-(3, 2);
+(3, 2),
+(1, 2), 
+(2, 2),
+(3, 2),
+(3, 2),
+(1, 2),
+(2, 2);
 GO
 
 INSERT INTO OrderDetail (OrderID, ProductDetailID, Quantity, Price) VALUES
@@ -161,5 +172,15 @@ INSERT INTO OrderDetail (OrderID, ProductDetailID, Quantity, Price) VALUES
 (15, 20, 1, 1200000),
 (15, 33, 1, 5000000),
 (15, 38, 1, 3100000),
-(15, 59, 1, 4200000);
+(15, 59, 1, 4200000),
+(16, 100, 1, 4000000),
+(16, 200, 1, 1200000),
+(17, 300, 1, 2400000),
+(17, 400, 2, 2900000),
+(18, 500, 1, 2200000),
+(18, 600, 1, 4200000),
+(19, 10, 3, 3500000),
+(19, 20, 5, 2800000),
+(20, 30, 2, 3200000),
+(21, 50, 7, 1800000);
 GO
