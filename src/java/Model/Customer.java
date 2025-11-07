@@ -15,6 +15,9 @@ public class Customer {
     private int AccountID;
     private String Address;
 
+    public Customer() {
+    }
+    
     public Customer(int CustomerID, String CustomerName, String PhoneNumber, int AccountID, String Address) {
         this.CustomerID = CustomerID;
         this.CustomerName = CustomerName;

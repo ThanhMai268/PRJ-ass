@@ -4,7 +4,7 @@
  */
 package Model;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 /**
  *
@@ -13,7 +13,7 @@ import java.security.Timestamp;
 public class Order {
     private int orderID;
     private int CustomerID;
-    private Timestamp OrderDate; // hoặc LocalDateTime 
+    private Timestamp OrderDate;
     private int Status;
 
     public Order(int orderID, Timestamp OrderDate,int CustomerID , int Status) {
@@ -23,6 +23,9 @@ public class Order {
         this.Status = Status;
     }
 
+    public Order() {
+    }
+    
     public int getOrderID() {
         return orderID;
     }

@@ -68,6 +68,9 @@ public class OverviewServlet extends HttpServlet {
         request.setAttribute("bestSellers", bestSellersList); 
         request.setAttribute("notificationList", notificationList);
         
+        // SET VIEW ĐỂ TRANG CHA BIẾT
+        request.setAttribute("pageView", "overview.jsp");
+        
         // Chuyển tiếp đến JSP
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
