@@ -20,22 +20,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "ProductManagerServlet", urlPatterns = {"/ProductManagerServlet"})
 public class ProductManagerServlet extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductManagerController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductManagerController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods.">
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -61,8 +45,9 @@ public class ProductManagerServlet extends HttpServlet {
         request.setAttribute("brands", brands);
         request.setAttribute("selectedBrand", selectedBrand);
         request.setAttribute("qtyMap", qtyMap);
-
-        request.getRequestDispatcher("productManager.jsp").forward(request, response);
+        
+        request.setAttribute("pageView", "productManager.jsp");
+        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 
     @Override

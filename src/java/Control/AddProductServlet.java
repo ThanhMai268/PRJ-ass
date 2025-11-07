@@ -27,14 +27,14 @@ public class AddProductServlet extends HttpServlet {
             throws ServletException, IOException {
         
         ProductDAO dao = new ProductDAO();
-        
         List<String> brandList = dao.getAllBrand(); 
         List<String> categoryList = dao.getALlCategory();
         
         request.setAttribute("brandList", brandList);
         request.setAttribute("categoryList", categoryList);
         
-        request.getRequestDispatcher("addProduct.jsp").forward(request, response);
+        request.setAttribute("pageView", "addProduct.jsp");
+        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 
     @Override
@@ -59,6 +59,6 @@ public class AddProductServlet extends HttpServlet {
         ProductDAO dao = new ProductDAO();
         dao.addProduct(newProduct); 
         
-        response.sendRedirect("AddProductControl"); 
+        response.sendRedirect("ProductManagerServlet"); 
     }
 }
