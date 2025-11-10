@@ -145,6 +145,10 @@ INSERT INTO [Order] (CustomerID, Status) VALUES
 GO
 
 INSERT INTO OrderDetail (OrderID, ProductDetailID, Quantity, Price) VALUES
+(1, 4, 5, 2800000),
+(2, 19, 4, 1200000),
+(3, 22, 2, 1100000),
+(2, 25, 1, 2700000),
 (4, 10, 1, 4000000),
 (5, 16, 2, 2500000),
 (6, 1, 1, 3500000),
