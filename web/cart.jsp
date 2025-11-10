@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html>
     <%@ include file="/header.jspf" %>
-    
+
 
 
 
@@ -150,9 +150,10 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <form action="${ctx}/Checkout" method="get" class="mt-3">
-                                        <button type="submit" class="btn btn-primary btn-block">Proceed to Checkout</button>
-                                    </form>
+                                    <div class="text-right mt-3">
+                                        <a class="btn btn-primary" href="${ctx}/Checkout">Proceed to Checkout</a>
+                                    </div>
+
                                 </div>
 
                             </div>

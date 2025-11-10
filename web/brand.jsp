@@ -65,8 +65,8 @@
                             <c:forEach items="${listPro}" var="p">
                                 <div class="col-lg-3 mb-4 text-center">
                                     <div class="product-entry border">
-                                        <a href="<c:url value='/product-detail'>
-                                               <c:param name='id' value='${p.id}'/>
+                                        <a href="<c:url value='/ProductDetail'>
+                                               <c:param name='pid' value='${p.id}'/>
                                            </c:url>" class="prod-img">
                                             <img 
                                                 src="<c:url value='images/${p.image}'/>" 
@@ -75,8 +75,8 @@
                                         </a>
                                         <div class="desc">
                                             <h2>
-                                                <a href="<c:url value='/product-detail'>
-                                                       <c:param name='id' value='${p.id}'/>
+                                                <a href="<c:url value='/ProductDetail'>
+                                                       <c:param name='pid' value='${p.id}'/>
                                                    </c:url>">
                                                     <c:out value="${p.name}"/>
                                                 </a>

@@ -26,7 +26,7 @@ public class ProductDAO {
 
     public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
-        String query = "SELECT * FROM Product";
+        String query = "SELECT * FROM Product where Status = 1";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -57,7 +57,7 @@ public class ProductDAO {
 
     public List<Product> getProductByBrand(String brand) {
         List<Product> list = new ArrayList<>();
-        String query = "select * from Product where Brand = ?";
+        String query = "select * from Product where Brand = ? and Status = 1";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
