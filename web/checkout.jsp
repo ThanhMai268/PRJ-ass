@@ -154,12 +154,7 @@
 
             <!-- Place order button (bên ph?i) -->
             <div class="col-md-12 text-center">
-              <c:if test="${not empty cartItems}">
-                <!-- submit form ? trái b?ng JS ho?c t?o form nh? ch? có nút -->
-<!--                <form action="${ctx}/PlaceOrder" method="post">
-                  <button type="submit" class="btn btn-primary">Place an order</button>
-                </form>-->
-              </c:if>
+
               <c:if test="${empty cartItems}">
                 <a href="${ctx}/Cart" class="btn btn-secondary">Back to Cart</a>
               </c:if>

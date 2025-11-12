@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Control;
 
 import DAO.CustomerDAO;
@@ -28,41 +27,9 @@ import java.time.LocalDateTime;
  *
  * @author dungdzpro
  */
-@WebServlet(name="PlaceOrderServlet", urlPatterns={"/PlaceOrder"})
+@WebServlet(name = "PlaceOrderServlet", urlPatterns = {"/PlaceOrder"})
 public class PlaceOrderServlet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PlaceOrderServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PlaceOrderServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     private Account getAcc(HttpServletRequest req) {
         HttpSession s = req.getSession(false);
         return (s == null) ? null : (Account) s.getAttribute("acc");
@@ -71,7 +38,9 @@ public class PlaceOrderServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     private List<CartItem> getCart(HttpServletRequest req, String userId) {
         HttpSession s = req.getSession(false);
-        if (s == null) return new ArrayList<>();
+        if (s == null) {
+            return new ArrayList<>();
+        }
         Object obj = s.getAttribute("cart_u" + userId);
         return (obj == null) ? new ArrayList<>() : (List<CartItem>) obj;
     }
@@ -88,11 +57,11 @@ public class PlaceOrderServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         String firstName = req.getParameter("firstName");
-        String lastName  = req.getParameter("lastName");
-        String fullName  = ((firstName == null ? "" : firstName.trim()) + " " +
-                            (lastName  == null ? "" : lastName.trim())).trim();
-        String phone     = req.getParameter("phone");
-        String address   = req.getParameter("address");
+        String lastName = req.getParameter("lastName");
+        String fullName = ((firstName == null ? "" : firstName.trim()) + " "
+                + (lastName == null ? "" : lastName.trim())).trim();
+        String phone = req.getParameter("phone");
+        String address = req.getParameter("address");
 
         String userId = String.valueOf(acc.getAid());
         List<CartItem> cart = getCart(req, userId);
@@ -102,10 +71,10 @@ public class PlaceOrderServlet extends HttpServlet {
         }
 
         try {
-            CustomerDAO customerDAO       = new CustomerDAO();
-            OrderDAO orderDAO             = new OrderDAO();
+            CustomerDAO customerDAO = new CustomerDAO();
+            OrderDAO orderDAO = new OrderDAO();
             OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
-            ProductDetailDAO pdDAO        = new ProductDetailDAO();
+            ProductDetailDAO pdDAO = new ProductDetailDAO();
             ProductDAO pDAO = new ProductDAO();
 
             // 1) Customer
@@ -115,27 +84,34 @@ public class PlaceOrderServlet extends HttpServlet {
             } else {
                 customerDAO.updateInfo(customerId, fullName, phone, address);
             }
-            
+
             // 2) Order
             int orderId = orderDAO.insert(LocalDateTime.now(), customerId, 0);
 
             // 3) OrderDetails (price = double)
+            // 3) OrderDetails
             for (CartItem it : cart) {
-                int pdId = pdDAO.getProductDetailByAttribute(it.getProductId(), it.getColorId(), it.getSizeId()).getPdid();
-                int qty  = it.getQuantity();
+                int pdId = pdDAO.getProductDetailByAttribute(
+                        it.getProductId(), it.getColorId(), it.getSizeId()
+                ).getPdid();
+                int qty = it.getQuantity();
 
-                // ưu tiên lấy từ item nếu có
-                Double unitPrice = it.getPrice(); // giả định CartItem có kiểu Double
+                Double unitPrice = it.getPrice();
                 if (unitPrice == null) {
-                    unitPrice = pDAO.getProductById(it.getProductId()).getPrice(); // có thể trả null
+                    unitPrice = pDAO.getProductById(it.getProductId()).getPrice();
                 }
                 if (unitPrice == null) {
-                    // fallback: tính từ subtotal()
-                    double sub = it.subtotal(); // đảm bảo subtotal() trả double
+                    double sub = it.subtotal();
                     unitPrice = sub / Math.max(qty, 1);
                 }
 
                 orderDetailDAO.insert(orderId, pdId, qty, unitPrice);
+
+                // TRỪ KHO
+                boolean ok = pdDAO.decreaseStock(pdId, qty);
+                if (!ok) {
+                    throw new RuntimeException("Sản phẩm không đủ hàng (pdId=" + pdId + ")");
+                }
             }
 
             // clear cart + redirect

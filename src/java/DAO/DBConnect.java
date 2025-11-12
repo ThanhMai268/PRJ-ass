@@ -5,6 +5,8 @@
 package DAO;
 import java.sql.Connection; 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,5 +46,25 @@ public class DBConnect {
     public void setErrorCode(int errorCode)
     {
         this.erorrCode = errorCode;
+    }
+    public void close(Connection conn, PreparedStatement ps, ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception e) {
+        }
+        try {
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (Exception e) {
+        }
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (Exception e) {
+        }
     }
 }

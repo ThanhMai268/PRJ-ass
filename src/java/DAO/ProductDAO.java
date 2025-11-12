@@ -10,19 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProductDAO { 
-
-    private int errorCode;
-
-    public void setErrorCode(int i) {
-        this.errorCode = i;
-    }
-    
-    private void close(Connection conn, PreparedStatement ps, ResultSet rs) {
-        try { if (rs != null) rs.close(); } catch (Exception e) {}
-        try { if (ps != null) ps.close(); } catch (Exception e) {}
-        try { if (conn != null) conn.close(); } catch (Exception e) {}
-    }
+public class ProductDAO extends DBConnect {
 
     public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
@@ -30,7 +18,7 @@ public class ProductDAO {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
@@ -42,8 +30,8 @@ public class ProductDAO {
                         rs.getString(3),
                         rs.getDouble(4),
                         rs.getString(5),
-                        rs.getString(6), 
-                        rs.getInt(7)                     
+                        rs.getString(6),
+                        rs.getInt(7)
                 ));
             }
         } catch (Exception e) {
@@ -61,7 +49,7 @@ public class ProductDAO {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
@@ -91,7 +79,7 @@ public class ProductDAO {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
@@ -123,7 +111,7 @@ public class ProductDAO {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
@@ -145,7 +133,7 @@ public class ProductDAO {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
@@ -174,7 +162,7 @@ public class ProductDAO {
         String sql = "UPDATE Product SET Status = ? WHERE ProductID = ?";
         Connection conn = null;
         PreparedStatement ps = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(sql);
@@ -199,7 +187,7 @@ public class ProductDAO {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(sql);
@@ -223,7 +211,7 @@ public class ProductDAO {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(sql);
@@ -238,13 +226,13 @@ public class ProductDAO {
         }
         return brands;
     }
-    
+
     public void addProduct(Product product) {
         String query = "INSERT INTO Product (ProductName, Image, Price, Category, Brand, Status) "
-                     + "VALUES (?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement ps = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
@@ -262,13 +250,14 @@ public class ProductDAO {
             close(conn, ps, null);
         }
     }
+
     public boolean updateProduct(int id, String name, String image, double price, String category, String brand) {
         String query = "UPDATE Product SET ProductName = ?, Image = ?, Price = ?, "
-                     + "Category = ?, Brand = ? WHERE ProductID = ?";
-        
+                + "Category = ?, Brand = ? WHERE ProductID = ?";
+
         Connection conn = null;
         PreparedStatement ps = null;
-        
+
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
@@ -278,7 +267,7 @@ public class ProductDAO {
             ps.setString(4, category);
             ps.setString(5, brand);
             ps.setInt(6, id);
-            
+
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (Exception e) {
@@ -289,4 +278,45 @@ public class ProductDAO {
             close(conn, ps, null);
         }
     }
+
+    public List<Product> searchByNameContains(String keyword) {
+    List<Product> list = new ArrayList<>();
+    if (keyword == null) keyword = "";
+    keyword = keyword.trim();
+    if (keyword.isEmpty()) return list; // tránh trả tất cả sản phẩm nếu không nhập gì
+
+    String sql = "SELECT * FROM Product " +
+                 "WHERE LOWER(ProductName) LIKE ? AND Status = 1";
+
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    try {
+        conn = new DBConnect().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, "%" + keyword.toLowerCase() + "%");
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            list.add(new Product(
+                rs.getInt(1),      // ProductID
+                rs.getString(2),   // ProductName
+                rs.getString(3),   // Image
+                rs.getDouble(4),   // Price
+                rs.getString(5),   // Category
+                rs.getString(6),   // Brand
+                rs.getInt(7)       // Status
+            ));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        setErrorCode(-1);
+    } finally {
+        close(conn, ps, rs);
+    }
+    return list;
+}
+
+
 }
