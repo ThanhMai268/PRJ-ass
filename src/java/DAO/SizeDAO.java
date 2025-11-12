@@ -23,9 +23,7 @@ public class SizeDAO extends DBConnect {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public SizeDAO() {
-        super();
-    }
+    
 
     public List<Size> getSizeOfProduct(List<ProductDetail> listProductDetail) {
         List<Size> listSize = new ArrayList<>();

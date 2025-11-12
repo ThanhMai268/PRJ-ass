@@ -9189,3 +9189,32 @@ input[type="text"] {
   font-size:20px; line-height:1; color:#9aa0a6; cursor:pointer; text-decoration:none !important;
 }
 .closed-btn:hover{ color:#e74c3c; }
+/* chinh sửa css in đậm chữ ở product detail */
+.block-26 ul{
+    display : flex;
+    gap: 10px;
+}
+.block-26 ul li a,
+.block-26 ul li span{
+    display: inline-flex;
+    width: 60px;
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 20px;
+    text-align: center;
+    box-sizing: border-box;
+}
+div.product-desc .block-26 ul li a.selected{
+    transform: none;
+    transition: none;
+    opacity: 3.6;
+    border: 2px solid #000; 
+    color: #FFFFFF;           
+    background-color: #999999;
+    font-weight: bold;
+}
+.block-26 ul li span.disabled{
+    opacity: 0.2;
+}

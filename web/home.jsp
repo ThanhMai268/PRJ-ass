@@ -146,12 +146,6 @@
 
 
 
-                                    <!-- ??i ms-2 -> ml-2 (BS4) -->
-<!--                                            <a href="<c:url value='/add-to-cart'><c:param name='id' value='${p.id}'/></c:url>"
-                                       class="btn btn-sm btn-outline-primary ml-2"
-                                       title="Add to Cart">
-                                            <i class="icon-shopping-cart"></i>
-                                        </a>-->
                                     </div>
 
                                 </div>

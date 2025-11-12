@@ -35,8 +35,14 @@
                 vertical-align: middle !important;
                 font-size: 15px;
             }
+            @media (min-width: 768px) {
+                .navbar-nav>li>a {
+                    padding-top: 11px;
+                    padding-bottom: 15px;
+                }
+            }
         </style>
-        </head>
+    </head>
     <body class="hold-transition skin-blue sidebar-mini">
         <div class="wrapper">
 
@@ -75,7 +81,9 @@
                             </li>
 
                             <li>
-                                <i class="fa fa-gears" style="color:white; font-size:18px; padding:15px;"></i>
+                                <a href="<c:url value='/Logout'/>">
+                                    <i class="fa fa-sign-out-alt"></i> Logout
+                                </a>
                             </li>
 
                         </ul>
@@ -104,7 +112,7 @@
                         </div>
                     </form>
                     <ul class="sidebar-menu">
-                        
+
                         <%-- Biến 'pageView' sẽ được set từ Servlet --%>
                         <c:set var="activePage" value="${pageView}" />
 
@@ -112,7 +120,7 @@
                            Sử dụng JSTL/EL để kiểm tra 'activePage' và thêm class 'active'
                            (Bỏ 'active treeview' cố định cũ)
                         --%>
-                        
+
                         <li class="${(empty activePage || activePage == 'overview.jsp') ? 'active' : ''}">
                             <a href="${pageContext.request.contextPath}/OverviewServlet">
                                 <i class="fa fa-cogs"></i> <span>Overview</span>
@@ -130,10 +138,10 @@
                         </li>
                     </ul>
                 </section>
-                </aside>
-            
+            </aside>
+
             <div class="content-wrapper">
-                
+
                 <%-- 
                   Kiểm tra xem Servlet có set 'pageView' không.
                   Nếu có, nạp trang đó.
@@ -147,9 +155,9 @@
                         <jsp:include page="overview.jsp" />
                     </c:otherwise>
                 </c:choose>
-                
+
             </div>
-            </div>
+        </div>
         <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
