@@ -100,10 +100,11 @@ public class CartServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/Login?errorAddToCart=1");
             return;
         }
-
+        
         String uid = getUserId(acc);
         List<CartItem> cart = getOrCreateCart(request, uid);
         putTotals(request, cart);
+        request.setAttribute(uid, acc);
         request.getRequestDispatcher("/cart.jsp").forward(request, response);
     }
 

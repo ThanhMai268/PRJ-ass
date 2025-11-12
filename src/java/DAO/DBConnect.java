@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class DBConnect {
     static String dbUser = "sa";
-    static String dbPass = "123";
+    static String dbPass = "123456";
     static String dbUrl = "jdbc:sqlserver://localhost:1433;databaseName=ShoeShopDB;encrypt=true;trustServerCertificate=true";
     
     protected Connection conn; //Connection là 1 property lưu kết nối CSDL

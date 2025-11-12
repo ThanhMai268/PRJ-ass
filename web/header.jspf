@@ -60,28 +60,44 @@
                                 <li class="has-dropdown">
                                     <a>Category</a>
                                     <ul class="dropdown">
-                                        <c:forEach var="cat" items="${listCategory}">
-                                            <li>
-                                                <a href="<c:url value='/Category'>
-                                                       <c:param name='cate' value='${cat}'/>
-                                                   </c:url>">
-                                                    ${cat}
-                                                </a>
-                                            </li>
-                                        </c:forEach>
+                                        <li>
+                                            <a href="Category?cate=Sport+Shoes">
+                                                Sport Shoes
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="Category?cate=Running+Shoes">
+                                                Running Shoes
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="Category?cate=Sneakers">
+                                                Sneakers
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="Category?cate=Sandals">
+                                                Sandals
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="Category?cate=Training+Shoes">
+                                                Training Shoes
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
 
                                 <li class="cart">
                                     <c:choose>
-                                        
+
                                         <c:when test="${not empty sessionScope.acc}">
                                             <a href="${pageContext.request.contextPath}/Cart">
                                                 <i class="icon-shopping-cart"></i> Cart [0]
                                             </a>
                                         </c:when>
 
-                                        
+
                                         <c:otherwise>
                                             <a href="${pageContext.request.contextPath}/Login?errorCart=1">
                                                 <i class="icon-shopping-cart"></i> Cart [0]
