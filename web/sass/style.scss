@@ -1894,3 +1894,19 @@ input[type="text"] {
 		opacity: 0;
 	}
 }
+.order-total-price {
+    display: inline-flex;
+    align-items: baseline; 
+}
+.cart-detail ul ul > li.d-flex > span:last-child {
+    display: inline-flex;
+    align-items: baseline; 
+}
+.cart-detail span.order-total-price {
+    display: inline-flex;
+    align-items: baseline; 
+    white-space: nowrap;  
+}
+.vnd {
+    margin-left: 1px; 
+}
