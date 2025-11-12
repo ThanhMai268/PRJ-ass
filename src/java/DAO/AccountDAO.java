@@ -73,4 +73,22 @@ public class AccountDAO extends DBConnect {
         }
         return false;
     }
+    public boolean isAdmin(String email, String pass){
+         String query = "select Role from Account where Email = ? and Password = ? ";
+        try {
+            conn = new DBConnect().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, pass);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+               if(rs.getInt(1)==1)return true;
+               return false;
+            }
+        } catch (Exception e) {
+            setErrorCode(-1);//lỗi lệnh SQL
+           
+        }
+        return false;
+    }
 }

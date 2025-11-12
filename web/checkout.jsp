@@ -88,9 +88,9 @@
                 </div>
 
                 <!-- Place Order (desktop: b?n c?ng có nút bên ph?i; ?? ?? phòng mobile) -->
-                <div class="row d-lg-none">
+                <div >
                   <div class="col-12 text-center">
-<!--                    <button type="submit" class="btn btn-primary">Place an order</button>-->
+                    <button type="submit" class="btn btn-primary">Place an order</button>
                   </div>
                 </div>
               </form>
@@ -156,9 +156,9 @@
             <div class="col-md-12 text-center">
               <c:if test="${not empty cartItems}">
                 <!-- submit form ? trái b?ng JS ho?c t?o form nh? ch? có nút -->
-                <form action="${ctx}/PlaceOrder" method="post">
+<!--                <form action="${ctx}/PlaceOrder" method="post">
                   <button type="submit" class="btn btn-primary">Place an order</button>
-                </form>
+                </form>-->
               </c:if>
               <c:if test="${empty cartItems}">
                 <a href="${ctx}/Cart" class="btn btn-secondary">Back to Cart</a>

@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.sql.Statement;
 // THAY ĐỔI: Kế thừa từ DBConnect của bạn
 public class CustomerDAO extends DBConnect {
 
@@ -37,6 +37,51 @@ public class CustomerDAO extends DBConnect {
             System.err.println("Error getting customer map: " + e.getMessage());
         }
         return customerMap;
+    }
+    public Integer findIdByAccountId(int accountId) throws SQLException {
+        String sql = "SELECT CustomerID FROM [Customer] WHERE AccountID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, accountId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getInt(1) : null;
+            }
+        }
+    }
+
+   
+    public int insert(String name, String phone, int accountId, String address) throws SQLException {
+        String sql = "INSERT INTO [Customer](CustomerName, PhoneNumber, AccountID, [Address]) VALUES (?,?,?,?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, name);
+            ps.setString(2, phone);
+            ps.setInt(3, accountId);
+            ps.setString(4, address);
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        // fallback nếu không bật generated keys
+        String q = "SELECT TOP 1 CustomerID FROM [Customer] WHERE AccountID=? ORDER BY CustomerID DESC";
+        try (PreparedStatement ps = conn.prepareStatement(q)) {
+            ps.setInt(1, accountId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        throw new SQLException("Cannot fetch CustomerID after insert");
+    }
+
+    
+    public void updateInfo(int customerId, String name, String phone, String address) throws SQLException {
+        String sql = "UPDATE [Customer] SET CustomerName=?, PhoneNumber=?, [Address]=? WHERE CustomerID=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            ps.setString(2, phone);
+            ps.setString(3, address);
+            ps.setInt(4, customerId);
+            ps.executeUpdate();
+        }
     }
     public Customer getCustomerById(int customerId) {
         String sql = "SELECT CustomerID, CustomerName, PhoneNumber, AccountID, Address " +

@@ -6,13 +6,18 @@ package DAO;
 
 import Model.Order;
 import Model.OrderDetailView;
+import Model.OrderSummary;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.sql.Statement;
+import java.sql.Timestamp;
 
 // THAY ĐỔI: Kế thừa từ DBConnect của bạn
 public class OrderDAO extends DBConnect {
@@ -147,5 +152,93 @@ public class OrderDAO extends DBConnect {
             System.err.println("Error getting order details view: " + e.getMessage());
         }
         return items;
+    }
+    public int insert(LocalDateTime orderDate, int customerId, int status) throws SQLException {
+        String sql = "INSERT INTO [Order](OrderDate, CustomerID, Status) VALUES (?,?,?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setTimestamp(1, Timestamp.valueOf(orderDate));
+            ps.setInt(2, customerId);
+            ps.setInt(3, status);
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        // fallback
+        String q = "SELECT TOP 1 OrderID FROM [Order] WHERE CustomerID=? ORDER BY OrderID DESC";
+        try (PreparedStatement ps = conn.prepareStatement(q)) {
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        throw new SQLException("Cannot fetch OrderID after insert");
+    }
+     /** Danh sách đơn theo AccountID (để đổ ra /Orders) */
+    public List<OrderSummary> findSummariesByAccount(int accountId) throws SQLException {
+        String sql =
+            "SELECT o.OrderID, o.OrderDate, o.Status,\n" +
+            "       COALESCE(SUM(od.Quantity * od.Price), 0) AS total\n" +
+            "FROM [Order] o\n" +
+            "JOIN Customer c ON c.CustomerID = o.CustomerID\n" +
+            "LEFT JOIN OrderDetail od ON od.OrderID = o.OrderID\n" +
+            "WHERE c.AccountID = ?\n" +
+            "GROUP BY o.OrderID, o.OrderDate, o.Status\n" +
+            "ORDER BY o.OrderID DESC";
+        Connection conn = null;
+        
+        ResultSet rs = null;
+        List<OrderSummary> list = new ArrayList<>();
+        try {
+            conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, accountId);
+            rs = ps.executeQuery();
+            
+                while (rs.next()) {
+                    OrderSummary o = new OrderSummary();
+                    o.setOrderId(rs.getInt("OrderID"));
+                    o.setOrderDate(rs.getTimestamp("OrderDate"));
+                    o.setStatus(rs.getInt("Status"));
+                    o.setTotal(rs.getDouble("total"));
+                    list.add(o);
+                }
+            }catch(Exception e){
+            setErrorCode(-1);
+        }
+        return list;
+    }
+
+    /** Tóm tắt 1 đơn + kiểm tra sở hữu theo AccountID (chống xem chéo) */
+    public OrderSummary findSummaryByIdForAccount(int orderId, int accountId) throws SQLException {
+        String sql =
+            "SELECT TOP 1 o.OrderID, o.OrderDate, o.Status,\n" +
+            "       c.CustomerName, c.PhoneNumber, c.[Address],\n" +
+            "       COALESCE(SUM(od.Quantity * od.Price), 0) AS total\n" +
+            "FROM [Order] o\n" +
+            "JOIN Customer c ON c.CustomerID = o.CustomerID\n" +
+            "LEFT JOIN OrderDetail od ON od.OrderID = o.OrderID\n" +
+            "WHERE o.OrderID = ? AND c.AccountID = ?\n" +
+            "GROUP BY o.OrderID, o.OrderDate, o.Status, c.CustomerName, c.PhoneNumber, c.[Address]";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.setInt(2, accountId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    OrderSummary o = new OrderSummary();
+                    o.setOrderId(rs.getInt("OrderID"));
+                    o.setOrderDate(rs.getTimestamp("OrderDate"));
+                    o.setStatus(rs.getInt("Status"));
+                    o.setCustomerName(rs.getString("CustomerName"));
+                    o.setPhone(rs.getString("PhoneNumber"));
+                    o.setAddress(rs.getString("Address"));
+                    o.setTotal(rs.getDouble("total"));
+                    return o;
+                }
+            }
+        }
+        return null; // không tồn tại hoặc không thuộc account này
     }
 }
