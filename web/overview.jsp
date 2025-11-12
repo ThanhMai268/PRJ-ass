@@ -89,7 +89,7 @@
                         <canvas id="barChart" style="height:230px"></canvas>
                     </div>
                 </div>
-                </div>
+            </div>
             <div class="box box-success">
                 <div class="box-header">
                     <h3 class="box-title" style="font-size: 25px;">
@@ -169,15 +169,14 @@
                 </div>
             </div>
         </div>
-        
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-        
+
         <script>
-            // 1. Lấy dữ liệu từ Servlet (đã được JSTL render)
-            // Dùng JSTL để in ra 2 mảng JavaScript
+            // 1. Lấy dữ liệu từ Servlet (Phần này đã đúng)
             var jsChartLabels = [
             <c:forEach var="label" items="${chartLabels}" varStatus="loop">
-                "${label}"<c:if test="${!loop.last}">,</c:if>
+            "${label}"<c:if test="${!loop.last}">,</c:if>
             </c:forEach>
             ];
 
@@ -187,58 +186,58 @@
             </c:forEach>
             ];
 
-            // 2. Chờ tài liệu load xong rồi mới vẽ (dùng jQuery)
-            // Lưu ý: jQuery đã được nạp ở file cha (dashboard.jsp)
-            $(function () {
-                // Lấy canvas context
-                var barChartCanvas = $('#barChart').get(0).getContext('2d');
-                // Định nghĩa dữ liệu cho biểu đồ
-                var barChartData = {
-                    labels: jsChartLabels, // Dữ liệu nhãn (trục X)
-                    datasets: [
-                        {
-                            label: 'Sản phẩm bán ra',
-                            backgroundColor: 'rgba(92, 184, 92, 0.8)', // Màu xanh lá
-                            borderColor: 'rgba(92, 184, 92, 1)',
-                            borderWidth: 1,
-                            data: jsChartValues // Dữ liệu số (trục Y)
-                        }
-                    ]
-                };
+            // 2. SỬA LỖI:
+            // Bỏ $(function() {...}) và dùng JS thuần để lấy canvas.
+            // Script này nằm sau thẻ <canvas> nên nó có thể thấy 'barChart' ngay.
+            var barChartCanvas = document.getElementById('barChart').getContext('2d');
 
-                // Tùy chọn cho biểu đồ
-                var barChartOptions = {
-                    maintainAspectRatio: false,
-                    responsive: true,
-                    legend: {
-                        display: false // Ẩn chú thích (vì chỉ có 1 bộ dữ liệu)
-                    },
-                    scales: {
-                        xAxes: [{
-                                gridLines: {display: false}
-                            }],
-                        yAxes: [{
-                                ticks: {
-                                    beginAtZero: true,
-                                    // Chỉ hiển thị số nguyên trên trục Y
-                                    callback: function (value) {
-                                        if (Number.isInteger(value)) {
-                                            return value;
-                                        }
+            // 3. Định nghĩa dữ liệu (Giữ nguyên)
+            var barChartData = {
+                labels: jsChartLabels, // Dữ liệu nhãn (trục X)
+                datasets: [
+                    {
+                        label: 'Sản phẩm bán ra',
+                        backgroundColor: 'rgba(92, 184, 92, 0.8)', // Màu xanh lá
+                        borderColor: 'rgba(92, 184, 92, 1)',
+                        borderWidth: 1,
+                        data: jsChartValues // Dữ liệu số (trục Y)
+                    }
+                ]
+            };
+
+            // 4. Tùy chọn cho biểu đồ (Giữ nguyên)
+            var barChartOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+                legend: {
+                    display: false // Ẩn chú thích (vì chỉ có 1 bộ dữ liệu)
+                },
+                scales: {
+                    xAxes: [{
+                            gridLines: {display: false}
+                        }],
+                    yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                // Chỉ hiển thị số nguyên trên trục Y
+                                callback: function (value) {
+                                    if (Number.isInteger(value)) {
+                                        return value;
                                     }
                                 }
-                            }]
-                    }
-                };
+                            }
+                        }]
+                }
+            };
 
-                // 3. Tạo biểu đồ
-                new Chart(barChartCanvas, {
-                    type: 'bar',
-                    data: barChartData,
-                    options: barChartOptions
-                });
+            // 5. Tạo biểu đồ (Giữ nguyên)
+            new Chart(barChartCanvas, {
+                type: 'bar',
+                data: barChartData,
+                options: barChartOptions
             });
+
         </script>
-        
+
     </div>
 </section>
