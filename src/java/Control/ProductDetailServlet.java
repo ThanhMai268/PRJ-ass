@@ -66,7 +66,7 @@ public class ProductDetailServlet extends HttpServlet {
 
         Product pro = tbpro.getProductById(pid);
         List<ProductDetail> listprode = tbprode.getProductDetailByPid(pid);
-        
+        List<String> listCategory = tbpro.getALlCategory();
         List<Size> listSize = tbSize.getSizeOfProduct(listprode);
         List<Color> listColor = tbColor.getColorOfProduct(listprode);
 
@@ -114,6 +114,7 @@ public class ProductDetailServlet extends HttpServlet {
         // 6) Gắn attribute về JSP
         request.setAttribute("pro", pro);
         
+        request.setAttribute("listCategory", listCategory);
 //        request.setAttribute("listprode", listprode);
         request.setAttribute("listSize", listSize);
         request.setAttribute("listColor", listColor);
