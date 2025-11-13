@@ -10,34 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProductDAO {
-
-    private int errorCode;
-
-    public void setErrorCode(int i) {
-        this.errorCode = i;
-    }
-
-    private void close(Connection conn, PreparedStatement ps, ResultSet rs) {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (Exception e) {
-        }
-        try {
-            if (ps != null) {
-                ps.close();
-            }
-        } catch (Exception e) {
-        }
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (Exception e) {
-        }
-    }
 public class ProductDAO extends DBConnect {
 
     public List<Product> getAllProduct() {
