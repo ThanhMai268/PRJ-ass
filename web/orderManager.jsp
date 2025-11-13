@@ -1,5 +1,5 @@
 <%--
-    Document    : saleManagement.jsp (FILE CON - Giao diện AdminLTE)
+    Document    : saleManagement.jsp (FILE CON)
     Author      : ADMIN
 --%>
 <%@ page import="java.util.List" %>
@@ -90,7 +90,7 @@
                                         Double total = orderTotals.get(o.getOrderID());
                                         String customerName = (c != null) ? c.getCustomerName() : "N/A";
                                         String customerPhone = (c != null && c.getPhoneNumber() != null) ? c.getPhoneNumber() : "N/A";
-                                        String orderTotalStr = (total != null) ? String.format("$%.2f", total) : "$0.00";
+                                        String orderTotalStr = (total != null) ? String.format("%.2fđ", total) : "0.00đ";
                             %>
                             <tr>
                                 <td>#<%= o.getOrderID() %></td>

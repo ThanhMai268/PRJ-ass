@@ -83,7 +83,7 @@
                                     <img src="images/<%= p.getImage() %>" alt="<%= p.getName() %>" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
                                 </td>
                                 <td><%= p.getName() %></td>
-                                <td>$<%= p.getPrice() %></td>
+                                <td><%= p.getPrice() %>đ</td>
                                 <td class="text-center">
                                     <%= qtyMap.get(p.getId()) != null ? qtyMap.get(p.getId()) : 0 %>
                                 </td>
