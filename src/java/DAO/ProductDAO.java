@@ -10,6 +10,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+public class ProductDAO {
+
+    private int errorCode;
+
+    public void setErrorCode(int i) {
+        this.errorCode = i;
+    }
+
+    private void close(Connection conn, PreparedStatement ps, ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception e) {
+        }
+        try {
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (Exception e) {
+        }
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (Exception e) {
+        }
+    }
 public class ProductDAO extends DBConnect {
 
     public List<Product> getAllProduct() {
@@ -279,6 +307,83 @@ public class ProductDAO extends DBConnect {
         }
     }
 
+    public boolean deleteProductPermanently(int productId) {
+
+        String sql1_DeleteOrderDetails = "DELETE FROM OrderDetail WHERE ProductDetailID IN (SELECT ProductDetailID FROM ProductDetail WHERE ProductID = ?)";
+        String sql2_DeleteProductDetails = "DELETE FROM ProductDetail WHERE ProductID = ?";
+        String sql3_DeleteProduct = "DELETE FROM Product WHERE ProductID = ?";
+
+        Connection conn = null;
+
+        try {
+            conn = new DBConnect().getConnection();
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement ps1 = conn.prepareStatement(sql1_DeleteOrderDetails)) {
+                ps1.setInt(1, productId);
+                ps1.executeUpdate();
+            }
+
+            try (PreparedStatement ps2 = conn.prepareStatement(sql2_DeleteProductDetails)) {
+                ps2.setInt(1, productId);
+                ps2.executeUpdate();
+            }
+
+            try (PreparedStatement ps3 = conn.prepareStatement(sql3_DeleteProduct)) {
+                ps3.setInt(1, productId);
+                int rowsAffected = ps3.executeUpdate();
+
+                conn.commit();
+                return rowsAffected > 0;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Transaction Error while deleting product: " + e.getMessage());
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                System.err.println("Rollback Error: " + ex.getMessage());
+            }
+            return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println("Error resetting AutoCommit: " + e.getMessage());
+            }
+        }
+    }
+
+    public List<Product> getAllProductForAdmin() {
+        List<Product> list = new ArrayList<>();
+        String query = "SELECT * FROM Product";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = new DBConnect().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Product(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDouble(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getInt(7)
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            setErrorCode(-1);
+        } finally {
+            close(conn, ps, rs);
+        }
+        return list;
+    }
     public List<Product> searchByNameContains(String keyword) {
     List<Product> list = new ArrayList<>();
     if (keyword == null) keyword = "";

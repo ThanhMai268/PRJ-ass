@@ -7,6 +7,7 @@ package Control;
 
 import DAO.CustomerDAO;
 import DAO.OrderDAO;
+import Model.Account;
 import Model.Customer;
 import Model.Order;
 
@@ -15,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,12 @@ public class OrderManagerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        if (acc == null || acc.getRole() != 1) { 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
+            return;
+        }
         // 1. Lấy tham số lọc 'status'
         String statusParam = request.getParameter("status");
         int selectedStatus = -1; // Mặc định là "All Statuses"
@@ -75,7 +82,12 @@ public class OrderManagerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        if (acc == null || acc.getRole() != 1) { 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
+            return;
+        }
         try {
             // 1. Lấy tham số từ AJAX
             int orderId = Integer.parseInt(request.getParameter("orderId"));

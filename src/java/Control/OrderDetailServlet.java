@@ -6,6 +6,7 @@ package Control;
 
 import DAO.CustomerDAO;
 import DAO.OrderDAO;
+import Model.Account;
 import Model.Customer;
 import Model.Order;
 import Model.OrderDetailView;
@@ -15,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -24,7 +26,12 @@ public class OrderDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        if (acc == null || acc.getRole() != 1) { 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
+            return;
+        }
         response.setContentType("text/html;charset=UTF-8");
         String orderIdParam = request.getParameter("orderID");
         

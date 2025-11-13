@@ -112,26 +112,31 @@
                         </tbody>
                     </table>
                 </div>
-                </div>
             </div>
+        </div>
     </div>
 </section>
+<script src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="${pageContext.request.contextPath}/plugins/fastclick/fastclick.js"></script>
+<script src="${pageContext.request.contextPath}/dist/js/app.min.js"></script>
+<script src="${pageContext.request.contextPath}/dist/js/demo.js"></script>                 
+
 <script>
     $(document).ready(function () {
-        
-        // Dùng .off() để tránh việc gán sự kiện nhiều lần khi nạp lại trang
-        $('body').off('change', '.product-status').on('change', '.product-status', function () {
-            var checkbox = $(this);
-            var productId = checkbox.data('id');
-            var status = checkbox.is(':checked') ? 1 : 0;
 
-            $.ajax({
-                url: '${pageContext.request.contextPath}/ProductManagerServlet',
-                type: 'POST',
-                data: {productId: productId, status: status},
-                success: function (response) {
-                    console.log('Updated product ' + productId + ' to status ' `+ status);
-                    // Bạn có thể thêm 1 thông báo "success" nhỏ ở đây nếu muốn
+    // Dùng .off() để tránh việc gán sự kiện nhiều lần khi nạp lại trang
+    $('body').off('change', '.product-status').on('change', '.product-status', function () {
+    var checkbox = $(this);
+    var productId = checkbox.data('id');
+    var status = checkbox.is(':checked') ? 1 : 0;
+    $.ajax({
+    url: '${pageContext.request.contextPath}/ProductManagerServlet',
+            type: 'POST',
+            data: {productId: productId, status: status},
+            success: function (response) {
+            console.log('Updated product ' + productId + ' to status ' + status);
                 },
                 error: function () {
                     alert('Error updating product status!');

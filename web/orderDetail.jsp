@@ -1,5 +1,5 @@
 <%--
-    Document    : orderDetail.jsp (FILE CON - Giao diện Hóa đơn AdminLTE)
+    Document    : orderDetail.jsp (FILE CON)
     Author      : ADMIN
 --%>
 <%@ page import="java.util.List" %>
@@ -13,7 +13,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
-    // --- GIỮ NGUYÊN LOGIC SCRIPTLET CỦA BẠN ---
     Order order = (Order) request.getAttribute("order");
     Customer customer = (Customer) request.getAttribute("customer");
     List<OrderDetailView> items = (List<OrderDetailView>) request.getAttribute("items");
@@ -26,13 +25,11 @@
     
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
-    // Thêm logic để gán màu cho Status
     String statusLabelClass = "label-warning"; // Pending
     if (order.getStatus() == 1) statusLabelClass = "label-info"; // Processing
     if (order.getStatus() == 2) statusLabelClass = "label-success"; // Shipped
     if (order.getStatus() == 3) statusLabelClass = "label-danger"; // Cancelled
     
-    // --- KẾT THÚC LOGIC SCRIPTLET ---
 %>
 
 <section class="content-header">
@@ -58,6 +55,44 @@
                 </h2>
             </div>
         </div>
+        <style>
+            .status-select-0 {
+                background-color: #f0ad4e !important;
+                color: white !important;
+                font-weight: bold;
+            }
+            .status-select-1 {
+                background-color: #3c8dbc !important;
+                color: white !important;
+                font-weight: bold;
+            }
+            .status-select-2 {
+                background-color: #00a65a !important;
+                color: white !important;
+                font-weight: bold;
+            }
+            .status-select-3 {
+                background-color: #d9534f !important;
+                color: white !important;
+                font-weight: bold;
+            }
+            .status-select-0 option {
+                background-color: white;
+                color: black;
+            }
+            .status-select-1 option {
+                background-color: white;
+                color: black;
+            }
+            .status-select-2 option {
+                background-color: white;
+                color: black;
+            }
+            .status-select-3 option {
+                background-color: white;
+                color: black;
+            }
+        </style>        
 
         <div class="row invoice-info">
             <div class="col-sm-6 invoice-col">
@@ -66,13 +101,25 @@
                     <strong><%= customer.getCustomerName() %></strong><br>
                     Address: <%= customer.getAddress() %><br>
                     Phone: <%= customer.getPhoneNumber() %><br>
-                    <%-- Email: <%= customer.getEmail() %> --%> <%-- (Bạn có thể thêm nếu có) --%>
                 </address>
             </div>
-            <div class="col-sm-6 invoice-col">
+
+            <div class="col-sm-6 invoice-col" id="status-container">
                 <b>Order Status:</b> 
-                <span class="label <%= statusLabelClass %>" style="font-size: 14px;"><%= statusMap.get(order.getStatus()) %></span>
+
+                <select class="form-control order-status" data-id="<%= order.getOrderID() %>" style="width: auto; display: inline-block; margin-left: 10px;">
+                    <%
+                        for (Map.Entry<Integer, String> entry : statusMap.entrySet()) {
+                    %>
+                    <option value="<%= entry.getKey() %>" <%= (order.getStatus() == entry.getKey()) ? "selected" : "" %>>
+                        <%= entry.getValue() %>
+                    </option>
+                    <%
+                        }
+                    %>
+                </select>
             </div>
+
         </div>
         <div class="row">
             <div class="col-xs-12 table-responsive">
@@ -129,7 +176,7 @@
                             </tr>
                             <tr>
                                 <th>Shipping:</th>
-                                <td>$0.00</td> <%-- (Lấy từ code servlet của bạn) --%>
+                                <td>$0.00</td> 
                             </tr>
                             <tr>
                                 <th>Grand Total:</th>
@@ -142,3 +189,62 @@
         </div>
     </section> 
 </section>
+<script src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="${pageContext.request.contextPath}/plugins/fastclick/fastclick.js"></script>
+<script src="${pageContext.request.contextPath}/dist/js/app.min.js"></script>
+<script src="${pageContext.request.contextPath}/dist/js/demo.js"></script>
+<script>
+    $(document).ready(function () {
+        var originalStatus;
+
+        var statusClassMap = {
+            '0': 'label-warning',
+            '1': 'label-info', 
+            '2': 'label-success',
+            '3': 'label-danger'
+        };
+
+        $('body').off('focus', '.order-status').on('focus', '.order-status', function () {
+            originalStatus = $(this).val();
+        });
+
+        $('body').off('change', '.order-status').on('change', '.order-status', function () {
+            var select = $(this);
+            var orderId = select.data('id');
+            var newStatus = select.val();
+
+            var statusText = select.find("option:selected").text().trim();
+            var statusBadge = $('#order-status-badge'); // Tìm badge bằng ID
+            var newClass = statusClassMap[newStatus];
+            var container = $('#status-container'); // Tìm container
+
+            $.ajax({
+                url: '${pageContext.request.contextPath}/OrderManagerServlet',
+                type: 'POST',
+                data: {
+                    orderId: orderId,
+                    status: newStatus
+                },
+                success: function (response) {
+                    console.log('Updated order ' + orderId + ' to status ' + newStatus);
+                    originalStatus = newStatus;
+                    statusBadge.text(statusText);
+                    statusBadge.removeClass('label-warning label-info label-success label-danger').addClass(newClass);
+                    container.css('background-color', '#dff0d8').delay(500).queue(function () {
+                        $(this).css('background-color', '').dequeue();
+                    });
+                },
+                error: function () {
+                    alert('Error updating order status!');
+                    select.val(originalStatus); 
+                    container.css('background-color', '#f2dede').delay(500).queue(function () {
+                        $(this).css('background-color', '').dequeue();
+                    });
+                }
+            });
+        });
+    });
+</script>
+

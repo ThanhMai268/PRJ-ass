@@ -42,11 +42,11 @@
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            
+
             <div class="box">
-                
+
                 <div class="box-header with-border">
-                    
+
                     <form method="get" action="OrderManagerServlet" class="form-inline" style="margin: 0; display: inline-block;">
                         <div class="form-group" style="margin-right: 5px;">
                             <label for="status_filter">Filter by status: </label>
@@ -65,10 +65,10 @@
                         </div>
                         <button type="submit" class="btn btn-sm btn-default"><i class="fa fa-filter"></i> Filter</button>
                     </form>
-                    
+
                     <div class="box-tools">
-                        </div>
-                    
+                    </div>
+
                 </div>
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
@@ -133,14 +133,22 @@
                         </tbody>
                     </table>
                 </div>
-                </div>
             </div>
+        </div>
     </div>
 </section>
+                        
+<script src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="${pageContext.request.contextPath}/plugins/fastclick/fastclick.js"></script>
+<script src="${pageContext.request.contextPath}/dist/js/app.min.js"></script>
+<script src="${pageContext.request.contextPath}/dist/js/demo.js"></script>
+
 <script>
     $(document).ready(function () {
         var originalStatus;
-        
+
         // Dùng .off() để tránh gán sự kiện nhiều lần khi nạp lại trang
         $('body').off('focus', '.order-status').on('focus', '.order-status', function () {
             originalStatus = $(this).val();
@@ -162,7 +170,7 @@
                     console.log('Updated order ' + orderId + ' to status ' + newStatus);
                     originalStatus = newStatus;
                     // Thêm hiệu ứng "highlight" khi thành công
-                    select.closest('tr').css('background-color', '#dff0d8').delay(500).queue(function(){
+                    select.closest('tr').css('background-color', '#dff0d8').delay(500).queue(function () {
                         $(this).css('background-color', '').dequeue();
                     });
                 },
@@ -170,7 +178,7 @@
                     alert('Error updating order status!');
                     select.val(originalStatus); // Rollback
                     // Thêm hiệu ứng "lỗi"
-                    select.closest('tr').css('background-color', '#f2dede').delay(500).queue(function(){
+                    select.closest('tr').css('background-color', '#f2dede').delay(500).queue(function () {
                         $(this).css('background-color', '').dequeue();
                     });
                 }

@@ -6,6 +6,7 @@
 package Control;
 
 import DAO.ProductDAO;
+import Model.Account;
 import Model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "ProductManagerServlet", urlPatterns = {"/ProductManagerServlet"})
 public class ProductManagerServlet extends HttpServlet {
@@ -24,6 +26,12 @@ public class ProductManagerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        if (acc == null || acc.getRole() != 1) { 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
+            return;
+        }
         ProductDAO dao = new ProductDAO();
 
         String selectedBrand = request.getParameter("brand");
@@ -33,7 +41,7 @@ public class ProductManagerServlet extends HttpServlet {
 
         List<Product> products;
         if ("all".equalsIgnoreCase(selectedBrand)) {
-            products = dao.getAllProduct();
+            products = dao.getAllProductForAdmin();
         } else {
             products = dao.getProductByBrand(selectedBrand.trim());
         }
@@ -53,6 +61,12 @@ public class ProductManagerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        if (acc == null || acc.getRole() != 1) { 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
+            return;
+        }
         // Xử lý AJAX update status
         String productIdStr = request.getParameter("productId");
         String statusStr = request.getParameter("status");
