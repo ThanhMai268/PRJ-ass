@@ -227,29 +227,69 @@ public class ProductDAO extends DBConnect {
         return brands;
     }
 
-    public void addProduct(Product product) {
+public int addProduct(Product product) {
         String query = "INSERT INTO Product (ProductName, Image, Price, Category, Brand, Status) "
+                + "OUTPUT Inserted.ProductID "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
+
         Connection conn = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
+        int generatedProductID = -1;
 
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
+
             ps.setString(1, product.getName());
             ps.setString(2, product.getImage());
             ps.setDouble(3, product.getPrice());
             ps.setString(4, product.getCategory());
             ps.setString(5, product.getBrand());
             ps.setInt(6, 1);
-            ps.executeUpdate();
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                generatedProductID = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            setErrorCode(-1);
+        } finally {
+            close(conn, ps, rs);
+        }
+
+        return generatedProductID;
+    }
+
+    public int addDefaultVariants(int productID) {
+        String query = "INSERT INTO ProductDetail (ProductID, ColorID, SizeID, Quantity, Status) "
+                     + "SELECT ?, c.ColorID, s.SizeID, 20, 1 "
+                     + "FROM Color c CROSS JOIN Size s "
+                     + "WHERE c.Status = 1";
+        
+        Connection conn = null;
+        PreparedStatement ps = null;
+        int rowsAffected = 0;
+
+        try {
+            conn = new DBConnect().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, productID);
+
+            rowsAffected = ps.executeUpdate(); 
+            
         } catch (Exception e) {
             e.printStackTrace();
             setErrorCode(-1);
         } finally {
             close(conn, ps, null);
         }
+        
+        return rowsAffected;
     }
+
 
     public boolean updateProduct(int id, String name, String image, double price, String category, String brand) {
         String query = "UPDATE Product SET ProductName = ?, Image = ?, Price = ?, "

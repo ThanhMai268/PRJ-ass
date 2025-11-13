@@ -69,8 +69,24 @@ public class AddProductServlet extends HttpServlet {
         Product newProduct = new Product(0, productName, imageUrl, price, category, brand, 1);
         
         ProductDAO dao = new ProductDAO();
-        dao.addProduct(newProduct); 
+
+        System.out.println("--- [AddProductServlet] Running doPost ---");
+        System.out.println("Calling dao.addProduct...");
         
+        int newProductID = dao.addProduct(newProduct);
+        
+        System.out.println("ProductID returned from DAO: " + newProductID); 
+        
+        if (newProductID > 0) {
+            System.out.println("ID > 0, calling addDefaultVariants...");
+            int rowsInserted = dao.addDefaultVariants(newProductID);
+            System.out.println("addDefaultVariants finished. Rows inserted: " + rowsInserted);
+
+        } else {
+            System.out.println("ID <= 0, SKIPPING addDefaultVariants.");
+        }
+        
+        System.out.println("Redirecting to ProductManagerServlet...");
         response.sendRedirect("ProductManagerServlet"); 
     }
 }
