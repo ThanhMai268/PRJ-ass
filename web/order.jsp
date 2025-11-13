@@ -27,7 +27,7 @@
                     <c:choose>
                         <c:when test="${empty orders}">
                             <div class="alert alert-info">Bạn chưa có đơn hàng nào.</div>
-                            <a class="btn btn-primary" href="<c:url value='/Shop'/>">Tiếp tục mua sắm</a>
+                            <a class="btn btn-primary" href="<c:url value='/Home'/>">Tiếp tục mua sắm</a>
                         </c:when>
                         <c:otherwise>
                             <div class="table-responsive">
@@ -48,8 +48,8 @@
                                                 <td><fmt:formatDate value="${o.orderDate}" pattern="yyyy-MM-dd HH:mm"/></td>
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${o.status == 0}"><span class="badge bg-warning text-dark">Pending</span></c:when>
-                                                        <c:when test="${o.status == 1}"><span class="badge bg-info text-dark">Processing</span></c:when>
+                                                        <c:when test="${o.status == 1}"><span class="badge bg-warning text-dark">Pending</span></c:when>
+                                                        <c:when test="${o.status == 0}"><span class="badge bg-info text-dark">Processing</span></c:when>
                                                         <c:when test="${o.status == 2}"><span class="badge bg-success">Completed</span></c:when>
                                                         <c:otherwise><span class="badge bg-secondary">Unknown</span></c:otherwise>
                                                     </c:choose>
