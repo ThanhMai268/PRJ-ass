@@ -86,7 +86,11 @@
                                         <input type="hidden" name="colorId"   value="${it.colorId}">
                                         <input type="hidden" name="sizeId"    value="${it.sizeId}">
 
-                                        <input type="hidden" name="quantity" value="${it.quantity}" min="1" max="999999">
+                                        <input type="hidden" name="quantity"
+                                               value="${it.quantity}"
+                                               min="1"
+                                               max="${it.maxQuantity}">
+
 
                                         <div class="input-group justify-content-center" style="gap:6px;">
                                             <button type="button" class="btn btn-outline-secondary btn-sm qty-btn" data-step="-1" aria-label="Decrease">−</button>

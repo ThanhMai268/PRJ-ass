@@ -100,7 +100,7 @@ public class CartServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/Login?errorAddToCart=1");
             return;
         }
-        
+
         String uid = getUserId(acc);
         List<CartItem> cart = getOrCreateCart(request, uid);
         putTotals(request, cart);
@@ -112,43 +112,75 @@ public class CartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1) Bắt buộc đăng nhập
         Object acc = getAcc(request);
         if (acc == null) {
             response.sendRedirect(request.getContextPath() + "/Login?errorAddToCart=1");
             return;
         }
 
-        // 2) Lấy giỏ theo user
         String uid = getUserId(acc);
         List<CartItem> cart = getOrCreateCart(request, uid);
 
-        // 3) Phân nhánh action
-        String action = Optional.ofNullable(request.getParameter("action")).orElse("add");
+        String action = java.util.Optional.ofNullable(request.getParameter("action")).orElse("add");
 
         switch (action) {
             case "add" -> {
-                // Đọc tham số từ form productdetail.jsp hoặc cart.jsp
                 int productId = Integer.parseInt(request.getParameter("productId"));
                 int sizeId = Integer.parseInt(request.getParameter("sizeId"));
                 int colorId = Integer.parseInt(request.getParameter("colorId"));
                 int quantity = Math.max(1, Integer.parseInt(request.getParameter("quantity")));
+
+                // LẤY currentStock gửi từ productdetail.jsp (nếu có)
+                String maxStockRaw = request.getParameter("maxStock");
+                int maxStock = Integer.MAX_VALUE;
+                if (maxStockRaw != null && !maxStockRaw.isBlank()) {
+                    try {
+                        maxStock = Integer.parseInt(maxStockRaw);
+                    } catch (NumberFormatException e) {
+                        maxStock = Integer.MAX_VALUE; // nếu parse lỗi thì coi như không giới hạn
+                    }
+                }
 
                 // Map sang CartItem (tên/giá/ảnh/sizeName/colorName… từ DAO)
                 ProductDetail pd = new ProductDetail();
                 pd.setPid(productId);
                 pd.setSid(sizeId);
                 pd.setCid(colorId);
-                CartItem item = toCartItem(pd);
-                item.setQuantity(quantity);
+                CartItem newItem = toCartItem(pd);
 
-                // Nếu đã có item trùng key (pid+size+color) -> GHI ĐÈ quantity (không cộng dồn)
-                int idx = cart.indexOf(item);
+                // Tìm item cũ trong cart
+                int idx = cart.indexOf(newItem);
+                CartItem target;
+
                 if (idx >= 0) {
-                    cart.get(idx).setQuantity(quantity);
-                    // Nếu muốn refresh name/price/image mỗi lần add: cart.set(idx, item);
+                    // Đang update từ cart.jsp (nút +/-): quantity là GIÁ TRỊ MỚI
+                    target = cart.get(idx);
+
+                    // Nếu lần này không gửi maxStock (request từ cart.jsp),
+                    // dùng lại maxQuantity đã lưu trước đó
+                    if (maxStock == Integer.MAX_VALUE && target.getMaxQuantity() > 0) {
+                        maxStock = target.getMaxQuantity();
+                    }
+
+                    int newQty = quantity;
+                    if (maxStock != Integer.MAX_VALUE && newQty > maxStock) {
+                        newQty = maxStock; // không cho vượt
+                    }
+
+                    target.setQuantity(newQty);
+                    target.setMaxQuantity(maxStock);
                 } else {
-                    cart.add(item);
+                    // Add từ productdetail.jsp (lần đầu)
+                    target = newItem;
+
+                    int newQty = quantity;
+                    if (maxStock != Integer.MAX_VALUE && newQty > maxStock) {
+                        newQty = maxStock;
+                    }
+
+                    target.setQuantity(newQty);
+                    target.setMaxQuantity(maxStock);
+                    cart.add(target);
                 }
             }
 
@@ -161,14 +193,13 @@ public class CartServlet extends HttpServlet {
                 key.setProductId(productId);
                 key.setSizeId(sizeId);
                 key.setColorId(colorId);
-                cart.remove(key); // cần equals/hashCode theo (productId,sizeId,colorId)
+                cart.remove(key);
             }
 
             case "clear" ->
                 cart.clear();
         }
 
-        // 4) Xử lý xong điều hướng về trang Cart (GET) để render
         response.sendRedirect(request.getContextPath() + "/Cart");
     }
 

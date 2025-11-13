@@ -21,6 +21,7 @@ public class CartItem {
     private double price;      // đơn giá
     private String colorName;
     private String sizeValue;
+    private int maxQuantity;
 
     public CartItem() {
     }
@@ -36,7 +37,13 @@ public class CartItem {
         this.colorName = colorName;
         this.sizeValue = sizeValue;
     }
+    public int getMaxQuantity() {
+        return maxQuantity;
+    }
 
+    public void setMaxQuantity(int maxQuantity) {
+        this.maxQuantity = maxQuantity;
+    }
     public String getColorName() {
         return colorName;
     }

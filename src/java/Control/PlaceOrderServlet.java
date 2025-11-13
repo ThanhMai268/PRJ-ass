@@ -86,7 +86,7 @@ public class PlaceOrderServlet extends HttpServlet {
             }
 
             // 2) Order
-            int orderId = orderDAO.insert(LocalDateTime.now(), customerId, 0);
+            int orderId = orderDAO.insert(LocalDateTime.now(), customerId, 1);
 
             // 3) OrderDetails (price = double)
             // 3) OrderDetails

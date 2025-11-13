@@ -141,6 +141,7 @@
                             <input type="hidden" name="productId" value="${pro.id}">
                             <input type="hidden" name="sizeId"    value="${selectedSizeId}">
                             <input type="hidden" name="colorId"   value="${selectedColorId}">
+                                <input type="hidden" name="maxStock"  value="${currentStock}">
 
                             <c:set var="canAdd" value="${selectedSizeId != null && selectedColorId != null && currentStock > 0}"/>
 
