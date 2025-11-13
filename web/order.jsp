@@ -48,8 +48,8 @@
                                                 <td><fmt:formatDate value="${o.orderDate}" pattern="yyyy-MM-dd HH:mm"/></td>
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${o.status == 1}"><span class="badge bg-warning text-dark">Pending</span></c:when>
-                                                        <c:when test="${o.status == 0}"><span class="badge bg-info text-dark">Processing</span></c:when>
+                                                        <c:when test="${o.status == 0}"><span class="badge bg-warning text-dark">Pending</span></c:when>
+                                                        <c:when test="${o.status == 1}"><span class="badge bg-info text-dark">Processing</span></c:when>
                                                         <c:when test="${o.status == 2}"><span class="badge bg-success">Completed</span></c:when>
                                                         <c:otherwise><span class="badge bg-secondary">Unknown</span></c:otherwise>
                                                     </c:choose>
