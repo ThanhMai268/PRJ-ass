@@ -35,12 +35,12 @@
                     <!-- logo + search -->
                     <div class="row">
                         <div class="col-sm-7 col-md-9">
-                            <div id="colorlib-logo"><a href="<c:url value='/Home'/>">ShoeShop</a></div>
+                            <div id="colorlib-logo"><a href="<c:url value='/Home'/>">ShoesShop</a></div>
                         </div>
                         <div class="col-sm-5 col-md-3">
-                            <form action="<c:url value='/search'/>" class="search-wrap">
+                            <form action="<c:url value='/Search'/>" class="search-wrap">
                                 <div class="form-group">
-                                    <input name="q" type="search" class="form-control search" placeholder="Search">
+                                    <input name="name" type="search" class="form-control search" placeholder="Search">
                                     <button class="btn btn-primary submit-search text-center" type="submit">
                                         <i class="icon-search"></i>
                                     </button>
@@ -93,14 +93,14 @@
 
                                         <c:when test="${not empty sessionScope.acc}">
                                             <a href="${pageContext.request.contextPath}/Cart">
-                                                <i class="icon-shopping-cart"></i> Cart [0]
+                                                <i class="icon-shopping-cart"></i> Cart 
                                             </a>
                                         </c:when>
 
 
                                         <c:otherwise>
                                             <a href="${pageContext.request.contextPath}/Login?errorCart=1">
-                                                <i class="icon-shopping-cart"></i> Cart [0]
+                                                <i class="icon-shopping-cart"></i> Cart 
                                             </a>
                                         </c:otherwise>
                                     </c:choose>

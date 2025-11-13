@@ -38,6 +38,7 @@ public class ProductDAO {
         } catch (Exception e) {
         }
     }
+public class ProductDAO extends DBConnect {
 
     public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
@@ -383,4 +384,44 @@ public class ProductDAO {
         }
         return list;
     }
+    public List<Product> searchByNameContains(String keyword) {
+    List<Product> list = new ArrayList<>();
+    if (keyword == null) keyword = "";
+    keyword = keyword.trim();
+    if (keyword.isEmpty()) return list; // tránh trả tất cả sản phẩm nếu không nhập gì
+
+    String sql = "SELECT * FROM Product " +
+                 "WHERE LOWER(ProductName) LIKE ? AND Status = 1";
+
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    try {
+        conn = new DBConnect().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, "%" + keyword.toLowerCase() + "%");
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            list.add(new Product(
+                rs.getInt(1),      // ProductID
+                rs.getString(2),   // ProductName
+                rs.getString(3),   // Image
+                rs.getDouble(4),   // Price
+                rs.getString(5),   // Category
+                rs.getString(6),   // Brand
+                rs.getInt(7)       // Status
+            ));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        setErrorCode(-1);
+    } finally {
+        close(conn, ps, rs);
+    }
+    return list;
+}
+
+
 }
