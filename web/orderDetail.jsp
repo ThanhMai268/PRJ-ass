@@ -150,8 +150,8 @@
                                 Color: <%= item.getColorName() %>
                             </td>
                             <td><%= item.getQuantity() %></td>
-                            <td>$<%= String.format("%.2f", item.getPrice()) %></td>
-                            <td>$<%= String.format("%.2f", itemTotal) %></td>
+                            <td><%= String.format("%.2f", item.getPrice()) %>đ</td>
+                            <td><%= String.format("%.2f", itemTotal) %>đ</td>
                         </tr>
                         <%
                             }

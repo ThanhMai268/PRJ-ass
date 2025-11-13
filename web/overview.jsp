@@ -22,8 +22,8 @@
             <div class="small-box bg-green">
                 <div class="inner">
                     <h3>
-                        <fmt:setLocale value="en_US"/>
-                        <fmt:formatNumber value="${monthlyRevenue}" type="currency" currencyCode="USD"/>
+                        <fmt:setLocale value="vi_VN"/>
+                        <fmt:formatNumber value="${monthlyRevenue}" type="currency" currencyCode="VND"/>
                     </h3>
                     <p>Monthly Revenue</p>
                 </div>
