@@ -6,6 +6,7 @@
 package Control;
 
 import DAO.ProductDAO;
+import Model.Account;
 import Model.Product;
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -34,6 +36,12 @@ public class EditProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        if (acc == null || acc.getRole() != 1) { 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
+            return;
+        }
         try {
             String id_raw = request.getParameter("pid");
             int id = Integer.parseInt(id_raw);
@@ -59,7 +67,12 @@ public class EditProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        if (acc == null || acc.getRole() != 1) { 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
+            return;
+        }
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
 

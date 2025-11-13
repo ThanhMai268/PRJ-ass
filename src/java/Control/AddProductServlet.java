@@ -5,6 +5,7 @@
 
 package Control;
 import DAO.ProductDAO;
+import Model.Account;
 import Model.Product;
 import java.util.List;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -25,7 +27,12 @@ public class AddProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        if (acc == null || acc.getRole() != 1) { 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
+            return;
+        }
         ProductDAO dao = new ProductDAO();
         List<String> brandList = dao.getAllBrand(); 
         List<String> categoryList = dao.getALlCategory();
@@ -40,7 +47,12 @@ public class AddProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        if (acc == null || acc.getRole() != 1) { 
+            response.sendRedirect(request.getContextPath() + "/Home"); 
+            return;
+        }
         request.setCharacterEncoding("UTF-8");
 
         String productName = request.getParameter("product_name");

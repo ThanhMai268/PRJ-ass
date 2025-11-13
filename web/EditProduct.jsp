@@ -20,15 +20,15 @@
 <section class="content">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            
-            <div class="box box-warning"> <%-- Đổi thành màu vàng (warning) cho Cập nhật --%>
+
+            <div class="box box-warning"> 
                 <div class="box-header with-border">
                     <h3 class="box-title">Edit Product Information</h3>
                 </div>
-                
+
                 <form role="form" action="editProduct" method="post">
                     <div class="box-body">
-                        
+
                         <input type="hidden" name="product_id" value="${productToEdit.id}" />
 
                         <div class="form-group">
@@ -36,7 +36,7 @@
                             <input type="text" class="form-control" id="product_name" name="product_name" 
                                    value="${productToEdit.name}" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="product_image_url">Image link</label>
                             <input type="text" class="form-control" id="product_image_url" name="product_image_url" 
@@ -60,7 +60,7 @@
                                 </c:forEach>
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="category">Category</label>
                             <select name="category_name" id="category" class="form-control" required>
@@ -72,14 +72,16 @@
                                 </c:forEach>
                             </select>
                         </div>
-                        
+
                     </div>
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-warning">LƯU THAY ĐỔI</button>
+                        <button type="submit" class="btn btn-warning">Save</button>
+                        <a href="DeleteProductServlet?pid=${productToEdit.id}" class="btn btn-danger" onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this product? All related order data will also be deleted.');">Delete</a>
                         <a href="ProductManagerServlet" class="btn btn-default pull-right">Cancel</a>
                     </div>
                 </form>
             </div>
-            </div>
+        </div>
     </div>
 </section>
+
