@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <p class="bread"><span>Home   / ${cate}</span></p>
+                    <p class="bread"><span>Home   / Product</span></p>
                 </div>
 
                 <div class="colorlib-partner">
@@ -62,7 +62,7 @@
                 </div>
                 <div class="row row-pb-md">
                     <c:if test="${empty listPro}">
-                        <p>Không có s?n ph?m nào!</p>
+                        <p>Sorry we do not have any product you find</p>
                     </c:if>
                     <c:forEach items="${listPro}" var="p">
                         <div class="col-lg-3 mb-4 text-center">

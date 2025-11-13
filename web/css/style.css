@@ -9218,3 +9218,115 @@ div.product-desc .block-26 ul li a.selected{
 .block-26 ul li span.disabled{
     opacity: 0.2;
 }
+/* chinh sửa css in đậm chữ ở product detail */
+.block-26 ul{
+    display : flex;
+    gap: 10px;
+}
+.block-26 ul li a,
+.block-26 ul li span{
+    display: inline-flex;
+    width: 60px;
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 15px;
+    text-align: center;
+    box-sizing: border-box;
+}
+div.product-desc .block-26 ul li a.selected{
+    transform: none;
+    transition: none;
+    opacity: 3.6;
+    border: 2px solid #000; 
+    color: #FFFFFF;           
+    background-color: #999999;
+    font-weight: bold;
+}
+.block-26 ul li span.disabled{
+    opacity: 0.2;
+}
+/* chỉnh sửa stock ngang hàng add to cart */
+.text-center > .btn-addtocart, 
+.text-center > .mt-2 {
+    display: inline-block;
+    vertical-align: middle;
+}
+.text-center > .mt-2 {
+    margin-top: 0;
+    margin-left: 85px;
+    font-size: 1.3rem; 
+    font-weight: 600; 
+}
+/* chinh sửa css ở checkout */
+/* ========================================================== */
+/* 1. Đảm bảo Billing Details và Cart Total ngang hàng 60%-40% */
+/* ========================================================== */
+@media (min-width: 992px) {
+    /* Áp dụng cho Billing Details */
+    .col-lg-8 {
+        /* Sử dụng tỷ lệ 60% bạn đã thiết lập */
+        flex: 0 0 60% !important;
+        max-width: 60% !important;
+    }
+    /* Áp dụng cho Cart Total */
+    .col-lg-4 {
+        /* Sử dụng tỷ lệ 40% bạn đã thiết lập */
+        flex: 0 0 40% !important;
+        max-width: 40% !important;
+    }
+}
+/* ========================================================== */
+/* 2. Căn chỉnh Tên sản phẩm (Hiển thị FULL, Ngang hàng)      */
+/* ========================================================== */
+/* Nhắm mục tiêu vào tất cả <span> chứa Tên SP (phần tử con đầu tiên của li.d-flex) */
+.cart-detail ul ul li.d-flex > span:first-child {
+    /* Đảm bảo nội dung không bao giờ xuống dòng, ngay cả khi tràn */
+    white-space: nowrap; 
+    /* Cho phép tên SP co dãn, nhưng ưu tiên không co lại hoàn toàn */
+    flex: 1 1 auto; 
+    /* Ngăn nội dung bị ẩn đi, hiển thị đầy đủ (sẽ tràn nếu quá dài) */
+    overflow: visible; 
+    text-overflow: clip; 
+    /* Thiết lập giới hạn chiều rộng để bảo vệ không gian của giá tiền */
+    max-width: calc(100% - 140px); /* Điều chỉnh từ 150px xuống 140px cho gọn */
+    padding-right: 15px; /* Khoảng cách rõ ràng giữa tên và giá */
+}
+/* Đảm bảo thẻ <small> (size/color) cũng không ngắt dòng */
+.cart-detail ul ul li.d-flex > span:first-child small {
+    white-space: nowrap;
+}
+/* ========================================================== */
+/* 3. Căn chỉnh Giá tiền và Ký hiệu "đ" Ngang hàng           */
+/* ========================================================== */
+/* Nhóm selector cho cả giá Subtotal (từng SP) và giá Order Total */
+.cart-detail ul ul li.d-flex > span:last-child,
+.cart-detail ul > li.d-flex > span:last-child {
+    /* Ngăn ngắt dòng giữa giá trị và ký hiệu VND */
+    white-space: nowrap;
+    /* Sử dụng Inline-Flex để căn chỉnh nội dung bên trong */
+    display: inline-flex;
+    align-items: baseline; /* Căn chỉnh theo đường cơ sở (dòng chữ) */
+    justify-content: flex-end; /* Đẩy giá trị sang bên phải trong cột giá */
+    /* QUAN TRỌNG: Không cho phép cột giá tiền bị co lại */
+    flex-shrink: 0; 
+    flex-grow: 0;
+}
+/* Chỉ thêm khoảng cách cho ký hiệu "đ" */
+.vnd {
+    margin-left: 4px; /* Giữ khoảng cách 4px bạn đã chọn */
+}
+/* Ghi đè CSS cho thẻ <span> tạo ra đường kẻ */
+.cart-detail ul li span,
+.cart-detail ul ul li span {
+    /* Loại bỏ đường viền dưới cùng */
+    border-bottom: none !important; 
+    border-color: transparent !important;
+}
+
+/* Tùy chọn: Loại bỏ margin-bottom của thẻ <span> nếu cần */
+.cart-detail ul li span {
+    margin-bottom: 15px;
+}
+

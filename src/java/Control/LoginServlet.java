@@ -21,12 +21,10 @@ import jakarta.servlet.http.HttpSession;
  */
 @WebServlet(name = "LoginControl", urlPatterns = {"/Login"})
 public class LoginServlet extends HttpServlet {
-
-    @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-
-    response.setContentType("text/html;charset=UTF-8");
+    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
     request.setCharacterEncoding("UTF-8");
 
     String email = request.getParameter("email");
@@ -52,6 +50,17 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     } else {
         response.sendRedirect("Home");
     }
+    } 
+@Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException{
+    processRequest(request, response);
+}
+    @Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+processRequest(request, response);
+    
 }
 
 

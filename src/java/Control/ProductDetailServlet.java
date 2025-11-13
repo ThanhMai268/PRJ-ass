@@ -175,13 +175,5 @@ public class ProductDetailServlet extends HttpServlet {
             return null;
         }
     }
-    public static void main(String[] args) {
-        ProductDetailDAO tbprode = new ProductDetailDAO();
-        List<ProductDetail> listprode = tbprode.getProductDetailByPid(2);
-        SizeDAO tbSize = new SizeDAO();
-        ColorDAO tbColor = new ColorDAO();
-        List<Size> listSize = tbSize.getSizeOfProduct(listprode);
-        List<Color> listColor = tbColor.getColorOfProduct(listprode);
-        System.out.println(listColor);
-    }
+    
 }
